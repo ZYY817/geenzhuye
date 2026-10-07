@@ -18,8 +18,10 @@ export default function Home() {
   const [contentReady, setContentReady] = useState(false);
 
   // 挂载信标：layout 内联兜底脚本以此判断 React 是否已接管 DOM
+  // 若兜底在 hydration 慢时已先触发，挂载后清除它以恢复正常动效
   useEffect(() => {
     document.documentElement.dataset.appMounted = "true";
+    document.documentElement.classList.remove("reveal-fallback");
   }, []);
 
   // 内容闸门：打字完成 → 正常揭幕；用户急于下滚 → 视为跳过开场；5.2s 保险丝兜底
