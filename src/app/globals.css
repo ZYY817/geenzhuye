@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* ============================================================== */
+    /* DTCG 2025.10 规范：三层 DESIGN TOKENS 系统体系                  */
+    /* ============================================================== */
+
+    /* ------------------------------------------------------------ */
+    /* Level 1: Primitive Tokens (基础物理常量)                      */
+    /* ------------------------------------------------------------ */
+    --primitive-bone-50: #ffffff;
+    --primitive-bone-100: #ffffff;
+    --primitive-bone-200: #fafafa;
+    --primitive-ink-900: #1d1d1f;
+    --primitive-ink-800: #2d2d2f;
+    --primitive-ink-600: #424245;
+    --primitive-ink-500: #555558; /* 优化对比度至 4.7:1 (WCAG 2.2 AA) */
+    --primitive-amber-500: #d97706;
+    --primitive-emerald-500: #059669;
+
+    /* ------------------------------------------------------------ */
+    /* Level 2: Semantic Tokens (全站语义化语境基准)                 */
+    /* ------------------------------------------------------------ */
+    --surface-ground: #ffffff;
+    --surface-monograph: #ffffff;
+    --surface-prismatic-card: #ffffff;
+    --bg-page: #ffffff;
+    --bg-card: #ffffff;
+
+    --text-primary: var(--primitive-ink-900);
+    --text-main: var(--primitive-ink-900);
+    --text-body: var(--primitive-ink-600);
+    --text-secondary: var(--primitive-ink-600);
+    --text-muted: var(--primitive-ink-500);
+    --text-tertiary: var(--primitive-ink-500);
+    --text-accent: var(--primitive-amber-500);
+    --text-success: var(--primitive-emerald-500);
+
+    --border-subtle: rgba(29, 29, 31, 0.08);
+    --border-color: rgba(29, 29, 31, 0.08);
+    --border-hover: rgba(29, 29, 31, 0.22);
+    --accent: var(--primitive-ink-900);
+
+    /* ------------------------------------------------------------ */
+    /* Level 3: Component Tokens (组件专用工程契约)                 */
+    /* ------------------------------------------------------------ */
+    --works-triptych-split: 58fr 27fr 15fr;
+    --focus-ring-color: rgba(29, 29, 31, 0.85);
+    --focus-ring-offset: 2px;
+  }
+
+  html {
+    background-color: #070709;
+    color: #f4f4f5;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    min-height: 100%;
+    width: 100%;
+  }
+
+  body {
+    background-color: #070709;
+    color: #f4f4f5;
+    overflow-x: hidden;
+    min-height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+
+  ::selection {
+    background-color: var(--primitive-ink-900);
+    color: #ffffff;
+  }
+
+  /* 全局无障碍可见焦点环 (WCAG 2.2 AA 合规) */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    border-radius: 6px;
+  }
+}
+
+/* Apple 级超纤细温润滚动条 (深黑适配) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* 电影级双向无限流动经纬字带关键帧 (GPU 合成器纯硬件加速) */
+@keyframes marquee-flow-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-flow-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-flow-left var(--marquee-duration, 40s) linear infinite;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-flow-right var(--marquee-duration, 40s) linear infinite;
+}
+
+/* 全局尊重操作系统减弱动态偏好 (prefers-reduced-motion) */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 触控设备光标隔离注销 */
+@media (hover: none) and (pointer: coarse) {
+  .desktop-only-cursor {
+    display: none !important;
+  }
+}
+
+/* 智能体任务拓扑激光脉冲流动画 */
+@keyframes dashFlow {
+  from {
+    stroke-dashoffset: 28;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-dash-flow {
+  animation: dashFlow 1.2s linear infinite;
+}
+
+/* 代码地图拓扑寻路激光束高精度循迹脉冲 (Hardware-accelerated Beam Flow) */
+@keyframes beamFlow {
+  0% {
+    stroke-dashoffset: 280;
+    opacity: 0.2;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -30;
+    opacity: 0.2;
+  }
+}
+
+.animate-beam-flow {
+  animation: beamFlow 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.group:hover .animate-beam-flow {
+  animation: beamFlow 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+/* 屏外区块渲染隔离：浏览器跳过视口外作品的排版与绘制，滚动更顺滑 */
+.work-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 680px;
+}
+
+/* Hydration 兜底：只展开显式标记的入场元素，不依赖 Framer Motion 行内样式序列 */
+.reveal-fallback [data-fallback-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+
+/* 兜底态下隐藏未执行的扫光和打字光标 */
+.reveal-fallback [data-motion-decoration] {
+  opacity: 0 !important;
+}
+
