@@ -69,7 +69,7 @@ export default function RootLayout({
         <script
           id="hydration-visibility-fallback"
           dangerouslySetInnerHTML={{
-            __html: `(function(){setTimeout(function(){if(document.documentElement.dataset.appMounted==='true')return;document.documentElement.classList.add('reveal-fallback');var l1=document.getElementById('hero-line-1'),l2=document.getElementById('hero-line-2');if(l1&&!l1.textContent)l1.textContent='见字如面，我是智宇。';if(l2&&!l2.textContent)l2.textContent='过往所作皆有回响，当下所谋正步步前行。';},4000);})();`,
+            __html: `(function(){if('scrollRestoration' in history){history.scrollRestoration='manual';}if(!location.hash&&scrollY>0){scrollTo(0,0);}setTimeout(function(){if(document.documentElement.dataset.appMounted==='true')return;document.documentElement.classList.add('reveal-fallback');var l1=document.getElementById('hero-line-1'),l2=document.getElementById('hero-line-2');if(l1&&!l1.textContent)l1.textContent='见字如面，我是智宇。';if(l2&&!l2.textContent)l2.textContent='过往所作皆有回响，当下所谋正步步前行。';},4000);})();`,
           }}
         />
       </body>
