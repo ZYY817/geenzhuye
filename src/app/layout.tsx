@@ -22,12 +22,12 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   alternates: { canonical: "/" },
-  title: "智宇 ZYY · 独立开发者 — 用 AI 创造",
+  title: "智宇 ZYY · AI 创作者 — 用 AI 创造",
   description:
-    "独立开发者智宇 (ZYY) 的作品档案：宇奇引擎 (600+ GitHub Stars)、奇览、多智能体编排调度器、企业自动化增效工具集等 AI 产品与系统工具。",
+    "AI 创作者智宇 (ZYY) 的作品档案：宇奇引擎 (600+ GitHub Stars)、奇览、多智能体编排调度器、企业自动化增效工具集等 AI 产品与系统工具。",
   openGraph: {
     url: "/",
-    title: "智宇 ZYY · 独立开发者 — 用 AI 创造",
+    title: "智宇 ZYY · AI 创作者 — 用 AI 创造",
     description:
       "用 AI 创造，让想法真正产生价值。宇奇引擎、奇览、Team Orchestrator 等独立软件作品档案。",
     type: "website",
@@ -37,13 +37,13 @@ export const metadata: Metadata = {
         url: "/og-cover.jpg",
         width: 1200,
         height: 630,
-        alt: "智宇 ZYY · 独立开发者 — AI 产品与作品档案",
+        alt: "智宇 ZYY · AI 创作者 — AI 产品与作品档案",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "智宇 ZYY · 独立开发者 — 用 AI 创造",
+    title: "智宇 ZYY · AI 创作者 — 用 AI 创造",
     description:
       "用 AI 创造，让想法真正产生价值。宇奇引擎、奇览、Team Orchestrator 等独立软件作品档案。",
     images: ["/og-cover.jpg"],
