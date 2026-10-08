@@ -191,6 +191,38 @@
   animation: beamFlow 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+/* 首屏滚动引导：入场渐显 + 细线脉动（reduced-motion 由全局规则自动静止） */
+@keyframes cue-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cue-drift {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+    opacity: 0.45;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.scroll-cue {
+  opacity: 0;
+  animation: cue-in 0.9s ease 1.7s forwards;
+}
+
+.scroll-cue-line {
+  transform-origin: top;
+  animation: cue-drift 2.4s ease-in-out infinite;
+}
+
 /* 屏外区块渲染隔离：浏览器跳过视口外作品的排版与绘制，滚动更顺滑 */
 .work-section {
   content-visibility: auto;

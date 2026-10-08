@@ -94,7 +94,7 @@ export function HeroTypewriter({ onReady }: { onReady?: () => void }) {
   return (
     <div className="space-y-3">
       {/* 核心第一句：内敛纯白 */}
-      <h1 className="text-2xl sm:text-[1.75rem] font-light tracking-tight text-white leading-snug">
+      <h1 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-light tracking-tight text-white leading-snug">
         <span className="sr-only">{HERO_LINE_1}</span>
         <span id="hero-line-1" aria-hidden="true">{HERO_LINE_1.slice(0, count1)}</span>
         {phase === 0 && (
@@ -107,7 +107,7 @@ export function HeroTypewriter({ onReady }: { onReady?: () => void }) {
       </h1>
 
       {/* 核心第二句：温润灰白 */}
-      <div className="text-sm sm:text-base text-neutral-400 font-light leading-relaxed min-h-[1.75rem]">
+      <div className="text-base sm:text-lg text-neutral-400 font-light leading-relaxed min-h-[1.9rem]">
         <span className="sr-only">{HERO_LINE_2}</span>
         <span id="hero-line-2" aria-hidden="true">{HERO_LINE_2.slice(0, count2)}</span>
         {phase >= 1 && (
