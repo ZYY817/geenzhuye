@@ -56,6 +56,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full bg-[#050507] text-[#f4f4f5] selection:bg-white selection:text-black font-sans antialiased relative overflow-x-hidden">
+      {/* 首屏容器：顶栏 + hero 合计占满一屏，任何视口高度下项目区都在屏外 */}
+      <div className="min-h-svh flex flex-col">
       {/* 极简顶栏：YQ 印记 + 联系方式，无生硬分割线 */}
       <motion.header
         data-fallback-reveal
@@ -128,11 +130,12 @@ export default function Home() {
       {/* ============================================================== */}
       {/* 第一幕 · 开场：纯文字自白，第一行先出，第二行随后敲出            */}
       {/* ============================================================== */}
-      <section className="w-full max-w-6xl mx-auto px-6 sm:px-12 pt-10 sm:pt-16 pb-16 sm:pb-24">
+      <section className="w-full max-w-6xl mx-auto px-6 sm:px-12 flex-1 flex flex-col justify-center pb-20 sm:pb-28">
         <div className="max-w-3xl">
           <HeroTypewriter onReady={() => setContentReady(true)} />
         </div>
       </section>
+      </div>
 
       {/* ============================================================== */}
       {/* 第二幕 · 作品长卷：图版与文字错落展开                           */}
