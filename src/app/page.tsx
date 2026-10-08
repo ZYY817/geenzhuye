@@ -56,8 +56,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full bg-[#050507] text-[#f4f4f5] selection:bg-white selection:text-black font-sans antialiased relative overflow-x-hidden">
-      {/* 首屏容器：顶栏 + hero 合计占满一屏，任何视口高度下项目区都在屏外 */}
-      <div className="relative min-h-svh flex flex-col">
       {/* 极简顶栏：YQ 印记 + 联系方式，无生硬分割线 */}
       <motion.header
         data-fallback-reveal
@@ -130,33 +128,11 @@ export default function Home() {
       {/* ============================================================== */}
       {/* 第一幕 · 开场：纯文字自白，第一行先出，第二行随后敲出            */}
       {/* ============================================================== */}
-      <section className="w-full max-w-6xl mx-auto px-6 sm:px-12 flex-1 flex flex-col justify-center pb-20 sm:pb-28">
+      <section className="w-full max-w-6xl mx-auto px-6 sm:px-12 pt-10 sm:pt-16 pb-16 sm:pb-24">
         <div className="max-w-3xl">
-          <motion.p
-            data-fallback-reveal
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: EASE_SILK }}
-            className="font-mono text-[11px] sm:text-xs tracking-[0.3em] text-neutral-500 mb-8"
-          >
-            SELECTED WORKS · 作品档案
-          </motion.p>
           <HeroTypewriter onReady={() => setContentReady(true)} />
         </div>
       </section>
-
-      {/* 滚动引导：细线脉动，提示下方还有内容 */}
-      <div
-        data-motion-decoration
-        aria-hidden="true"
-        className="scroll-cue absolute bottom-9 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
-      >
-        <span className="font-mono text-[10px] tracking-[0.35em] text-neutral-500">
-          SCROLL
-        </span>
-        <span className="scroll-cue-line block w-px h-11 bg-gradient-to-b from-neutral-400/70 to-transparent" />
-      </div>
-      </div>
 
       {/* ============================================================== */}
       {/* 第二幕 · 作品长卷：图版与文字错落展开                           */}
