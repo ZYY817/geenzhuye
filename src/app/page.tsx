@@ -16,6 +16,8 @@ import { EASE_SILK } from "@/components/site/motion";
 export default function Home() {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [contentReady, setContentReady] = useState(false);
+  // 分级揭幕：大屏上多块同屏时按序出场，而非同时弹开
+  const [revealStage, setRevealStage] = useState(0);
 
   // 挂载信标：layout 内联兜底脚本以此判断 React 是否已接管 DOM
   // 若兜底在 hydration 慢时已先触发，挂载后清除它以恢复正常动效
@@ -36,6 +38,18 @@ export default function Home() {
       window.removeEventListener("scroll", onScroll);
       window.clearTimeout(failsafe);
     };
+  }, [contentReady]);
+
+  // 揭幕序列：01 立即，其后每 ~0.5s 解锁一级（02→03→04）
+  useEffect(() => {
+    if (!contentReady) return;
+    const timers = [
+      window.setTimeout(() => setRevealStage(1), 0),
+      window.setTimeout(() => setRevealStage(2), 480),
+      window.setTimeout(() => setRevealStage(3), 960),
+      window.setTimeout(() => setRevealStage(4), 1440),
+    ];
+    return () => timers.forEach(window.clearTimeout);
   }, [contentReady]);
 
   const copyEmail = () => {
@@ -145,7 +159,7 @@ export default function Home() {
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center"
         >
           <MediaPlate
-            gate={contentReady}
+            gate={revealStage >= 1}
             ratio="1200 / 780"
             className="lg:col-span-7"
             footer={
@@ -168,7 +182,7 @@ export default function Home() {
             <YuqiInteractiveWebDemo boot={contentReady} />
           </MediaPlate>
 
-          <TextBlock gate={contentReady} className="lg:col-span-5 flex flex-col justify-center space-y-4 text-left">
+          <TextBlock gate={revealStage >= 1} className="lg:col-span-5 flex flex-col justify-center space-y-4 text-left">
             <ProjectText
               size="lg"
               label="01 // 模块化系统优化"
@@ -184,7 +198,7 @@ export default function Home() {
           id="project-02"
           className="work-section grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center"
         >
-          <TextBlock className="lg:col-span-5 flex flex-col justify-center space-y-4 text-left order-2 lg:order-1">
+          <TextBlock gate={revealStage >= 2} className="lg:col-span-5 flex flex-col justify-center space-y-4 text-left order-2 lg:order-1">
             <ProjectText
               size="lg"
               label="02 // AI IDE 项目地图"
@@ -193,7 +207,7 @@ export default function Home() {
             />
           </TextBlock>
 
-          <MediaPlate ratio="16 / 9" glow="rgba(16,185,129,0.06)" className="lg:col-span-7 order-1 lg:order-2">
+          <MediaPlate gate={revealStage >= 2} ratio="16 / 9" glow="rgba(16,185,129,0.06)" className="lg:col-span-7 order-1 lg:order-2">
             <MinimalWorkMedia project={project02} />
           </MediaPlate>
         </section>
@@ -203,11 +217,11 @@ export default function Home() {
           id="project-03"
           className="work-section grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center"
         >
-          <MediaPlate ratio="16 / 9" className="lg:col-span-7">
+          <MediaPlate gate={revealStage >= 3} ratio="16 / 9" className="lg:col-span-7">
             <MinimalWorkMedia project={project03} />
           </MediaPlate>
 
-          <TextBlock className="lg:col-span-5 flex flex-col justify-center space-y-4 text-left">
+          <TextBlock gate={revealStage >= 3} className="lg:col-span-5 flex flex-col justify-center space-y-4 text-left">
             <ProjectText
               size="lg"
               label="03 // 多智能体任务调度"
@@ -222,7 +236,7 @@ export default function Home() {
           id="project-04"
           className="work-section grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center"
         >
-          <TextBlock className="lg:col-span-5 flex flex-col justify-center space-y-4 text-left order-2 lg:order-1">
+          <TextBlock gate={revealStage >= 4} className="lg:col-span-5 flex flex-col justify-center space-y-4 text-left order-2 lg:order-1">
             <ProjectText
               size="lg"
               label="04 // 视觉风格参考库"
@@ -231,7 +245,7 @@ export default function Home() {
             />
           </TextBlock>
 
-          <MediaPlate ratio="16 / 10" glow="rgba(140,160,255,0.07)" className="lg:col-span-7 order-1 lg:order-2">
+          <MediaPlate gate={revealStage >= 4} ratio="16 / 10" glow="rgba(140,160,255,0.07)" className="lg:col-span-7 order-1 lg:order-2">
             <MinimalWorkMedia project={project04} />
           </MediaPlate>
         </section>
@@ -239,10 +253,10 @@ export default function Home() {
         {/* 纯文字精炼展卷：需求锻造台 & AI 前端反平庸设计知识库 */}
         <section className="work-section pt-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-            <TextBlock id="project-05" className="space-y-3.5 text-left">
+            <TextBlock gate={contentReady} id="project-05" className="space-y-3.5 text-left">
               <ProjectText label="05 // 需求规范与产品文档" project={project05} />
             </TextBlock>
-            <TextBlock id="project-06" className="space-y-3.5 text-left">
+            <TextBlock gate={contentReady} id="project-06" className="space-y-3.5 text-left">
               <ProjectText label="06 // 前端美学与提示词指南" project={project06} />
             </TextBlock>
           </div>
@@ -251,10 +265,10 @@ export default function Home() {
         {/* 实用开源工具组：一刻相册批量下载 & 修改器快捷下载器 */}
         <section className="work-section pt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-            <TextBlock id="project-07" className="space-y-3.5 text-left">
+            <TextBlock gate={contentReady} id="project-07" className="space-y-3.5 text-left">
               <ProjectText label="7 // 批量导出工具" project={project07} />
             </TextBlock>
-            <TextBlock id="project-08" className="space-y-3.5 text-left">
+            <TextBlock gate={contentReady} id="project-08" className="space-y-3.5 text-left">
               <ProjectText label="08 // 单机游戏辅助" project={project08} />
             </TextBlock>
           </div>
@@ -262,7 +276,7 @@ export default function Home() {
 
         {/* 项目 09 · 企业自动化增效工具集（内部交付，无公开演示） */}
         <section className="work-section pt-4">
-          <TextBlock id="project-09" className="space-y-3.5 text-left md:max-w-xl">
+          <TextBlock gate={contentReady} id="project-09" className="space-y-3.5 text-left md:max-w-xl">
             <ProjectText label="09 // 企业流程自动化" project={project09}>
               <MaskedLine i={4}>
                 <div className="pt-2 flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono text-xs text-neutral-500">
