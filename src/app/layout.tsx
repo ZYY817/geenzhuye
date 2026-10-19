@@ -22,14 +22,14 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   alternates: { canonical: "/" },
-  title: "智宇 ZYY · AI 创作者 — 用 AI 创造",
+  title: "智宇 ZYY · AI 创作者 — 做工具，也分享经验与思考",
   description:
-    "AI 创作者智宇 (ZYY) 的作品档案：宇奇引擎 (600+ GitHub Stars)、奇览、多智能体编排调度器、企业自动化增效工具集等 AI 产品与系统工具。",
+    "AI 创作者智宇 (ZYY) 的个人档案：做解决问题的实用工具，也毫无保留地分享经验与思考思路。宇奇引擎 (10万+ 用户)、多智能体编排调度器、代码库拓扑导图等 AI 与系统工具。",
   openGraph: {
     url: "/",
-    title: "智宇 ZYY · AI 创作者 — 用 AI 创造",
+    title: "智宇 ZYY · AI 创作者 — 做工具，也分享经验与思考",
     description:
-      "用 AI 创造，让想法真正产生价值。宇奇引擎、奇览、Team Orchestrator 等独立软件作品档案。",
+      "一个希望用自己经验帮到普通人的普通人。做解决问题的实用工具，也毫无保留地分享经验与思考思路。",
     type: "website",
     siteName: "智宇 ZYY",
     images: [

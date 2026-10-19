@@ -235,7 +235,7 @@ export const SYSTEM_METRICS = {
   handle: "ZYY817",
   title: "APPLIED AI · PRODUCT BUILDER & SYSTEMS CRAFTSPERSON",
   status: "ACTIVE // CALIBRATED",
-  bio: "用 AI 创造，让想法真正产生价值。专注于系统性能调校、AI Agent 编排与高质感独立软件产品。",
+  bio: "用 AI 创造，做解决问题的实用工具，也毫无保留地分享经验与思考思路。一个希望用自己的经验帮到普通人的普通人。",
   manifesto: "先理解，再选择；可验证，也可恢复。",
   coordinates: "31°13'N 121°28'E",
   socials: {

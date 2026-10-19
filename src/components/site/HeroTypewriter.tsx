@@ -48,12 +48,15 @@ export function HeroTypewriter({ onReady }: { onReady?: () => void }) {
       </div>
 
       {/* 核心大白话自述 */}
-      <div className="space-y-2 text-xs sm:text-[14px] text-neutral-400 font-light leading-relaxed max-w-2xl">
+      <div className="space-y-2.5 text-xs sm:text-[14px] text-neutral-400 font-light leading-relaxed max-w-2xl">
         <p>
-          平时我喜欢把自己踩过的坑、解决过的问题做成实用工具，也喜欢用 AI 去做一些以前自己一个人做不到的事。
+          平时除了写代码、做工具，我也很喜欢把摸索出来的经验和思考思路毫无保留地分享出来。
         </p>
         <p>
-          做出的 Windows 优化工具<span className="text-neutral-200 font-normal">「宇奇引擎」已有超 10 万人下载使用</span>；平时我也会在 B 站和抖音分享我的开发过程与好用的工具。
+          我的思路其实很简单：把自己踩过的坑、解决过的问题实实在在做成工具；同时借助 AI，去做那些以前一个人从没做到过的新事情。
+        </p>
+        <p>
+          做出的 Windows 模块化优化工具<span className="text-neutral-200 font-normal">「宇奇引擎」已有超 10 万人下载使用</span>。平时我会在 B 站和抖音持续分享实战经验、开发日常与思考思路，希望能给同样在探索的朋友一点实在的启发与参考。
         </p>
       </div>
 
