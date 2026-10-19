@@ -167,15 +167,28 @@ export default function Home() {
                 <span className="text-neutral-400">
                   在线 Web 架构 Demo · 支持直接点击操作
                 </span>
-                <a
-                  href={project01.links.bilibili || "/yuqi-web-demo/index.html"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-neutral-400 hover:text-white transition-colors flex items-center gap-1 group/link"
-                >
-                  <span>Bilibili 演示</span>
-                  <ArrowUpRight className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                </a>
+                <div className="flex items-center gap-4">
+                  {project01.links.website && (
+                    <a
+                      href={project01.links.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-neutral-400 hover:text-white transition-colors flex items-center gap-1 group/link"
+                    >
+                      <span>官网</span>
+                      <ArrowUpRight className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                    </a>
+                  )}
+                  <a
+                    href={project01.links.bilibili || "/yuqi-web-demo/index.html"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-neutral-400 hover:text-white transition-colors flex items-center gap-1 group/link"
+                  >
+                    <span>Bilibili 演示</span>
+                    <ArrowUpRight className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                  </a>
+                </div>
               </>
             }
           >

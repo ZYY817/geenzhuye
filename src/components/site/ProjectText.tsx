@@ -11,6 +11,7 @@ import type { ProjectItem } from "@/data/archive";
  * ==========================================================================*/
 
 const LINK_LABELS: [keyof ProjectItem["links"], string][] = [
+  ["website", "官网"],
   ["demo", "在线访问"],
   ["quark", "夸克网盘下载"],
   ["github", "GitHub 仓库"],
@@ -30,12 +31,21 @@ export function ProjectLinks({
   project: ProjectItem;
   extra?: ExtraLink[];
 }) {
-  const items: ExtraLink[] = [
-    ...extra,
-    ...LINK_LABELS.filter(([key]) => project.links[key]).map(([key, label]) => ({
+  const websiteItem: ExtraLink[] = project.links.website
+    ? [{ href: project.links.website, label: "官网" }]
+    : [];
+
+  const otherItems: ExtraLink[] = LINK_LABELS
+    .filter(([key]) => key !== "website" && project.links[key])
+    .map(([key, label]) => ({
       href: project.links[key]!,
       label,
-    })),
+    }));
+
+  const items: ExtraLink[] = [
+    ...websiteItem,
+    ...extra,
+    ...otherItems,
   ];
   if (items.length === 0) return null;
 

@@ -15,6 +15,7 @@ export interface ProjectItem {
   specs: { label: string; value: string }[];
   tags: string[];
   links: {
+    website?: string;
     github?: string;
     release?: string;
     bilibili?: string;
@@ -45,6 +46,7 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
       { label: "PHILOSOPHY", value: "检测先行 · 可逆恢复 · 零流氓" },
     ],
     links: {
+      website: "https://yuqiengine.pages.dev/",
       github: "https://github.com/ZYY817/YuqiEngine",
       release: "https://github.com/ZYY817/YuqiEngine/releases",
       bilibili: "https://space.bilibili.com/41173761",
