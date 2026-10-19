@@ -244,6 +244,7 @@ export const SYSTEM_METRICS = {
     bilibiliHandle: "智宇丶817",
     douyin: "https://www.douyin.com/user/MS4wLjABAAAAtudWpqXWwZXYdkSk0YT36zpHEPiS2YuFsQL21ihiUxI",
     douyinId: "35071658",
+    wechat: "zhiyuydyh",
     x: "https://x.com/ZHIYUGAME",
     xHandle: "@ZHIYUGAME",
     email: "q571567759@aliyun.com",

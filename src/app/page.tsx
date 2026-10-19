@@ -15,6 +15,7 @@ import { EASE_SILK } from "@/components/site/motion";
 
 export default function Home() {
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedWechat, setCopiedWechat] = useState(false);
   const [contentReady, setContentReady] = useState(false);
   // 分级揭幕：大屏上多块同屏时按序出场，而非同时弹开
   const [revealStage, setRevealStage] = useState(0);
@@ -58,6 +59,12 @@ export default function Home() {
     window.setTimeout(() => setCopiedEmail(false), 2000);
   };
 
+  const copyWechat = () => {
+    navigator.clipboard?.writeText(SYSTEM_METRICS.socials.wechat || "zhiyuydyh").catch(() => {});
+    setCopiedWechat(true);
+    window.setTimeout(() => setCopiedWechat(false), 2000);
+  };
+
   const project01 = ARCHIVE_PROJECTS.find((p) => p.id === "yuqi-engine") || ARCHIVE_PROJECTS[0];
   const project02 = ARCHIVE_PROJECTS.find((p) => p.id === "agent-project-map") || ARCHIVE_PROJECTS[1];
   const project03 = ARCHIVE_PROJECTS.find((p) => p.id === "yuqi-team-orchestrator") || ARCHIVE_PROJECTS[2];
@@ -70,13 +77,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full bg-[#050507] text-[#f4f4f5] selection:bg-white selection:text-black font-sans antialiased relative overflow-x-hidden">
-      {/* 极简顶栏：YQ 印记 + 联系方式，无生硬分割线 */}
+      {/* 极简顶栏：YQ 印记 + 社交直达 / 微信复制 */}
       <motion.header
         data-fallback-reveal
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: EASE_SILK }}
-        className="w-full max-w-6xl mx-auto px-6 sm:px-12 py-10 sm:py-14 flex items-center justify-between"
+        className="w-full max-w-6xl mx-auto px-6 sm:px-12 py-8 sm:py-12 flex items-center justify-between"
       >
         <div className="flex items-center gap-2.5 font-mono text-sm tracking-wider text-white font-normal">
           <Image
@@ -90,52 +97,71 @@ export default function Home() {
           智宇
         </div>
 
-        <div className="flex items-center gap-5 sm:gap-8 font-mono text-xs text-neutral-400">
+        <div className="flex items-center gap-4 sm:gap-7 font-mono text-xs text-neutral-400">
+          {/* 微信快速复制 */}
           <button
-            onClick={copyEmail}
-            className="hover:text-white transition-colors cursor-pointer flex items-center gap-1.5 group"
+            onClick={copyWechat}
+            className="hover:text-white transition-colors cursor-pointer flex items-center gap-1 group"
           >
-            {copiedEmail ? (
+            {copiedWechat ? (
               <>
-                <Check className="w-3 h-3 text-white" />
-                <span className="text-white">已复制</span>
+                <Check className="w-3 h-3 text-emerald-400" />
+                <span className="text-emerald-400 font-medium">已复制微信</span>
               </>
             ) : (
               <>
-                <span className="hidden sm:inline hover:underline underline-offset-4">{SYSTEM_METRICS.socials.email}</span>
-                <span className="sm:hidden hover:underline underline-offset-4">EMAIL</span>
+                <span className="hover:underline underline-offset-4">微信</span>
                 <Copy className="w-3 h-3 opacity-40 group-hover:opacity-90 transition-opacity" />
               </>
             )}
           </button>
 
           <a
-            href={SYSTEM_METRICS.socials.github}
+            href={SYSTEM_METRICS.socials.bilibili}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white transition-colors flex items-center gap-0.5"
           >
-            <span>GitHub</span>
+            <span>Bilibili</span>
             <ArrowUpRight className="w-3 h-3" />
           </a>
+
           <a
-            href={SYSTEM_METRICS.socials.x}
+            href={SYSTEM_METRICS.socials.douyin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors flex items-center gap-0.5"
+          >
+            <span>抖音</span>
+            <ArrowUpRight className="w-3 h-3" />
+          </a>
+
+          <a
+            href={SYSTEM_METRICS.socials.github}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white transition-colors hidden sm:flex items-center gap-0.5"
           >
-            <span>X</span>
+            <span>GitHub</span>
             <ArrowUpRight className="w-3 h-3" />
           </a>
-          <a
-            href={SYSTEM_METRICS.socials.bilibili}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition-colors hidden md:flex items-center gap-0.5"
+
+          <button
+            onClick={copyEmail}
+            className="hover:text-white transition-colors cursor-pointer hidden md:flex items-center gap-1 group"
           >
-            <span>Bilibili</span>
-            <ArrowUpRight className="w-3 h-3" />
-          </a>
+            {copiedEmail ? (
+              <>
+                <Check className="w-3 h-3 text-emerald-400" />
+                <span className="text-emerald-400 font-medium">已复制邮箱</span>
+              </>
+            ) : (
+              <>
+                <span className="hover:underline underline-offset-4">{SYSTEM_METRICS.socials.email}</span>
+                <Copy className="w-3 h-3 opacity-40 group-hover:opacity-90 transition-opacity" />
+              </>
+            )}
+          </button>
         </div>
       </motion.header>
 
