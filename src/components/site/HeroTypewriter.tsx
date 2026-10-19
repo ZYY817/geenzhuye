@@ -137,87 +137,94 @@ export function HeroTypewriter({ onReady }: { onReady?: () => void }) {
         )}
       </div>
 
-      {/* 快捷联系与入口行：微信快速复制 / B站 / 抖音 / GitHub / 邮箱 */}
+      {/* 快捷联系与入口行：一体化极简微磨砂 HUD 交互坞（告别塑料胶囊感与花哨 Emoji，极客高级融合） */}
       <div
-        className={`pt-2 flex flex-wrap items-center gap-2.5 sm:gap-3 font-mono text-xs transition-opacity duration-700 ${
+        className={`pt-3 transition-opacity duration-700 ${
           phase === 2 ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* 微信快速复制 */}
-        <button
-          onClick={copyWechat}
-          type="button"
-          className="px-3.5 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/80 hover:bg-neutral-800 hover:border-neutral-700 hover:text-white text-neutral-300 transition-all flex items-center gap-1.5 cursor-pointer group shadow-sm"
-        >
-          {copiedWechat ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400 font-medium">已复制微信: {SYSTEM_METRICS.socials.wechat}</span>
-            </>
-          ) : (
-            <>
-              <MessageSquare className="w-3.5 h-3.5 text-emerald-400/80 group-hover:text-emerald-400 transition-colors" />
-              <span>微信：{SYSTEM_METRICS.socials.wechat}</span>
-              <Copy className="w-3 h-3 opacity-40 group-hover:opacity-90 transition-opacity" />
-            </>
-          )}
-        </button>
+        <div className="inline-flex flex-wrap items-center gap-x-4 sm:gap-x-5 gap-y-2 rounded-full border border-white/[0.08] bg-white/[0.02] hover:border-white/[0.14] px-4 py-2 font-mono text-xs text-neutral-400 backdrop-blur-md transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_20px_-6px_rgba(0,0,0,0.5)]">
+          {/* 在线信标 */}
+          <div className="flex items-center gap-1.5 text-neutral-500">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)] animate-pulse" />
+            <span className="text-[11px] tracking-wider text-neutral-400 font-normal">交流</span>
+          </div>
 
-        {/* B站 */}
-        <a
-          href={SYSTEM_METRICS.socials.bilibili}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-3.5 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/80 hover:bg-neutral-800 hover:border-neutral-700 hover:text-white text-neutral-300 transition-all flex items-center gap-1.5 shadow-sm group"
-        >
-          <span>📺</span>
-          <span>B站：{SYSTEM_METRICS.socials.bilibiliHandle || "智宇丶817"}</span>
-          <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </a>
+          <span className="text-white/[0.1] select-none">/</span>
 
-        {/* 抖音 */}
-        <a
-          href={SYSTEM_METRICS.socials.douyin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-3.5 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/80 hover:bg-neutral-800 hover:border-neutral-700 hover:text-white text-neutral-300 transition-all flex items-center gap-1.5 shadow-sm group"
-        >
-          <span>🎵</span>
-          <span>抖音：{SYSTEM_METRICS.socials.douyinId || "35071658"}</span>
-          <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </a>
+          {/* 微信快速复制 */}
+          <button
+            onClick={copyWechat}
+            type="button"
+            className="hover:text-white transition-colors cursor-pointer flex items-center gap-1.5 group/wx"
+          >
+            <span className={copiedWechat ? "text-emerald-400 font-medium" : "text-neutral-300 group-hover/wx:text-white"}>
+              {copiedWechat ? `微信号已复制: ${SYSTEM_METRICS.socials.wechat}` : `微信 ${SYSTEM_METRICS.socials.wechat}`}
+            </span>
+            {copiedWechat ? (
+              <Check className="w-3 h-3 text-emerald-400" />
+            ) : (
+              <Copy className="w-3 h-3 opacity-30 group-hover/wx:opacity-90 transition-opacity" />
+            )}
+          </button>
 
-        {/* GitHub */}
-        <a
-          href={SYSTEM_METRICS.socials.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-3.5 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/80 hover:bg-neutral-800 hover:border-neutral-700 hover:text-white text-neutral-300 transition-all flex items-center gap-1.5 shadow-sm group"
-        >
-          <span>🐙</span>
-          <span>GitHub</span>
-          <ArrowUpRight className="w-3 h-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </a>
+          <span className="text-white/[0.1] select-none">/</span>
 
-        {/* 邮箱 */}
-        <button
-          onClick={copyEmail}
-          type="button"
-          className="px-3.5 py-1.5 rounded-full border border-neutral-800 bg-neutral-900/80 hover:bg-neutral-800 hover:border-neutral-700 hover:text-white text-neutral-300 transition-all flex items-center gap-1.5 cursor-pointer group shadow-sm"
-        >
-          {copiedEmail ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400 font-medium">已复制邮箱</span>
-            </>
-          ) : (
-            <>
-              <span>✉️</span>
-              <span>邮箱</span>
-              <Copy className="w-3 h-3 opacity-40 group-hover:opacity-90 transition-opacity" />
-            </>
-          )}
-        </button>
+          {/* B站 */}
+          <a
+            href={SYSTEM_METRICS.socials.bilibili}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white text-neutral-300 transition-colors flex items-center gap-1 group/bili"
+          >
+            <span>Bilibili</span>
+            <ArrowUpRight className="w-3 h-3 opacity-40 group-hover/bili:opacity-100 group-hover/bili:translate-x-0.5 group-hover/bili:-translate-y-0.5 transition-all" />
+          </a>
+
+          <span className="text-white/[0.1] select-none">/</span>
+
+          {/* 抖音 */}
+          <a
+            href={SYSTEM_METRICS.socials.douyin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white text-neutral-300 transition-colors flex items-center gap-1 group/dy"
+          >
+            <span>抖音</span>
+            <ArrowUpRight className="w-3 h-3 opacity-40 group-hover/dy:opacity-100 group-hover/dy:translate-x-0.5 group-hover/dy:-translate-y-0.5 transition-all" />
+          </a>
+
+          <span className="text-white/[0.1] select-none">/</span>
+
+          {/* GitHub */}
+          <a
+            href={SYSTEM_METRICS.socials.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white text-neutral-300 transition-colors flex items-center gap-1 group/gh"
+          >
+            <span>GitHub</span>
+            <ArrowUpRight className="w-3 h-3 opacity-40 group-hover/gh:opacity-100 group-hover/gh:translate-x-0.5 group-hover/gh:-translate-y-0.5 transition-all" />
+          </a>
+
+          <span className="text-white/[0.1] select-none">/</span>
+
+          {/* 邮箱 */}
+          <button
+            onClick={copyEmail}
+            type="button"
+            className="hover:text-white text-neutral-300 transition-colors cursor-pointer flex items-center gap-1 group/em"
+          >
+            <span className={copiedEmail ? "text-emerald-400 font-medium" : ""}>
+              {copiedEmail ? "邮箱已复制" : "邮箱"}
+            </span>
+            {copiedEmail ? (
+              <Check className="w-3 h-3 text-emerald-400" />
+            ) : (
+              <Copy className="w-3 h-3 opacity-30 group-hover/em:opacity-90 transition-opacity" />
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
