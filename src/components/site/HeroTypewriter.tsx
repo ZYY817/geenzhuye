@@ -14,7 +14,7 @@ import { SYSTEM_METRICS } from "@/data/archive";
  * ==========================================================================*/
 
 const HERO_LINE_1 = "Hello，我是智宇。";
-const HERO_LINE_2 = "把懂的、解决过的问题做成工具，借 AI 之力做以前做不到的事。";
+const HERO_LINE_2 = "把我懂的经验和思考，借助 AI 去帮到更多的人。";
 
 let heroCompletionCache = false;
 

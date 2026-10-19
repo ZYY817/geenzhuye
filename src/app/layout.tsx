@@ -24,12 +24,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   title: "智宇 ZYY — Hello，我是智宇",
   description:
-    "Hello，我是智宇。把懂的、解决过的问题做成工具，借 AI 之力做以前做不到的事。宇奇引擎 (10万+ 用户)、多智能体编排调度器等 AI 与系统工具作品档案。",
+    "Hello，我是智宇。把我懂的经验和思考，借助 AI 去帮到更多的人。宇奇引擎 (10万+ 用户)、多智能体编排调度器等 AI 与系统作品档案。",
   openGraph: {
     url: "/",
     title: "智宇 ZYY — Hello，我是智宇",
     description:
-      "把懂的、解决过的问题做成工具，借 AI 之力做以前做不到的事。",
+      "把我懂的经验和思考，借助 AI 去帮到更多的人。",
     type: "website",
     siteName: "智宇 ZYY",
     images: [
