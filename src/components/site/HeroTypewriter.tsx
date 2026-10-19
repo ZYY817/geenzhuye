@@ -1,26 +1,91 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Copy, Check, MessageSquare } from "lucide-react";
 import { SYSTEM_METRICS } from "@/data/archive";
 
 /* ============================================================================
- * 头部欢迎与自白 (Hero Intro & Profile Direct Entry)
+ * 开场打字机 (Hero Typewriter) — 智宇专属自述
  * ----------------------------------------------------------------------------
- * 风格对齐真实、真诚、大白话直奔主题（破冰打招呼 + 身份共鸣 + 实在战绩 + 快捷直达）
+ * 1. 原生拟人打字手感：随机击键 + 标点停顿 + 光标呼吸退出。
+ * 2. 状态安全：StrictMode / 路由切换 / 缓存状态绝不重复打字。
+ * 3. 敲击完成后轻柔浮现快捷入口（微信快速复制 / B站 / 抖音 / GitHub / 邮箱）。
  * ==========================================================================*/
 
+const HERO_LINE_1 = "Hello，我是智宇。";
+const HERO_LINE_2 = "把懂的、解决过的问题做成工具，借 AI 之力做以前做不到的事。";
+
+let heroCompletionCache = false;
+
 export function HeroTypewriter({ onReady }: { onReady?: () => void }) {
+  const reduced = useReducedMotion();
+  const cached = heroCompletionCache;
+  const [count1, setCount1] = useState(cached ? HERO_LINE_1.length : 0);
+  const [count2, setCount2] = useState(cached ? HERO_LINE_2.length : 0);
+  const [phase, setPhase] = useState<0 | 1 | 2>(cached ? 2 : 0); // 0=敲第一行 1=敲第二行 2=完成
   const [copiedWechat, setCopiedWechat] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const onReadyRef = useRef(onReady);
 
   useEffect(() => {
-    // 页面进入即就绪，内容顺畅铺开无卡顿等待
-    const timer = window.setTimeout(() => {
-      onReady?.();
-    }, 120);
-    return () => window.clearTimeout(timer);
+    onReadyRef.current = onReady;
   }, [onReady]);
+
+  useEffect(() => {
+    if (heroCompletionCache) {
+      onReadyRef.current?.();
+      return;
+    }
+
+    const timers: number[] = [];
+    const later = (fn: () => void, ms: number) => {
+      timers.push(window.setTimeout(fn, ms));
+    };
+
+    if (reduced) {
+      later(() => {
+        setCount1(HERO_LINE_1.length);
+        setCount2(HERO_LINE_2.length);
+        setPhase(2);
+        heroCompletionCache = true;
+        onReadyRef.current?.();
+      }, 0);
+      return () => timers.forEach(window.clearTimeout);
+    }
+
+    // 拟人击键：基础 22–45ms，标点处自然换气停顿
+    const keystrokeDelay = (ch: string) =>
+      22 + Math.random() * 25 + (/[，。、；！？…]/.test(ch) ? 160 : 0);
+
+    const typeLine = (line: string, set: (n: number) => void, done: () => void) => {
+      const step = (idx: number) => {
+        set(idx);
+        if (idx >= line.length) {
+          done();
+          return;
+        }
+        later(() => step(idx + 1), keystrokeDelay(line[idx]));
+      };
+      step(0);
+    };
+
+    // 0.28s 静止后落笔第一行
+    later(() => {
+      typeLine(HERO_LINE_1, setCount1, () => {
+        setPhase(1);
+        later(() => {
+          typeLine(HERO_LINE_2, setCount2, () => {
+            setPhase(2);
+            heroCompletionCache = true;
+            later(() => onReadyRef.current?.(), 220);
+          });
+        }, 180);
+      });
+    }, 280);
+
+    return () => timers.forEach(window.clearTimeout);
+  }, [reduced]);
 
   const copyWechat = () => {
     const wx = SYSTEM_METRICS.socials.wechat || "zhiyuydyh";
@@ -35,33 +100,49 @@ export function HeroTypewriter({ onReady }: { onReady?: () => void }) {
     window.setTimeout(() => setCopiedEmail(false), 2200);
   };
 
+  const cursorCls =
+    "inline-block w-[2px] h-[0.85em] bg-white align-baseline transition-opacity duration-700";
+
   return (
-    <div className="space-y-6">
-      {/* 头部大标题：直接真诚打招呼 */}
-      <div className="space-y-2.5">
-        <h1 className="text-2xl sm:text-3xl font-medium tracking-tight text-white flex items-center gap-2 flex-wrap">
-          <span>👋 可以叫我智宇 or ZYY817</span>
-        </h1>
-        <p className="text-sm sm:text-base text-neutral-300 font-light">
-          一个希望用自己的经验帮到普通人的普通人。
-        </p>
+    <div className="space-y-4 sm:space-y-5">
+      {/* 核心第一句：内敛纯白 */}
+      <h1 className="text-2xl sm:text-[1.85rem] font-light tracking-tight text-white leading-snug">
+        <span className="sr-only">{HERO_LINE_1}</span>
+        <span id="hero-line-1" aria-hidden="true">
+          {HERO_LINE_1.slice(0, count1)}
+        </span>
+        {phase === 0 && (
+          <span
+            aria-hidden="true"
+            data-motion-decoration
+            className={`${cursorCls} ml-2 shadow-[0_0_8px_rgba(255,255,255,0.8)]`}
+          />
+        )}
+      </h1>
+
+      {/* 核心第二句：温润灰白 */}
+      <div className="text-sm sm:text-base text-neutral-400 font-light leading-relaxed min-h-[1.75rem]">
+        <span className="sr-only">{HERO_LINE_2}</span>
+        <span id="hero-line-2" aria-hidden="true">
+          {HERO_LINE_2.slice(0, count2)}
+        </span>
+        {phase >= 1 && (
+          <span
+            aria-hidden="true"
+            data-motion-decoration
+            className={`${cursorCls} w-[1.5px] ml-1.5 bg-neutral-300 ${
+              phase === 2 ? "opacity-0 delay-700" : "opacity-100"
+            }`}
+          />
+        )}
       </div>
 
-      {/* 核心大白话自述 */}
-      <div className="space-y-2.5 text-xs sm:text-[14px] text-neutral-400 font-light leading-relaxed max-w-2xl">
-        <p>
-          平时除了写代码、做工具，我也很喜欢把摸索出来的经验和思考思路毫无保留地分享出来。
-        </p>
-        <p>
-          我的思路其实很简单：把自己踩过的坑、解决过的问题实实在在做成工具；同时借助 AI，去做那些以前一个人从没做到过的新事情。
-        </p>
-        <p>
-          做出的 Windows 模块化优化工具<span className="text-neutral-200 font-normal">「宇奇引擎」已有超 10 万人下载使用</span>。平时我会在 B 站和抖音持续分享实战经验、开发日常与思考思路，希望能给同样在探索的朋友一点实在的启发与参考。
-        </p>
-      </div>
-
-      {/* 快捷联系与直达入口行（微信、B站、抖音、GitHub、邮箱） */}
-      <div className="pt-2 flex flex-wrap items-center gap-2.5 sm:gap-3 font-mono text-xs">
+      {/* 快捷联系与入口行：微信快速复制 / B站 / 抖音 / GitHub / 邮箱 */}
+      <div
+        className={`pt-2 flex flex-wrap items-center gap-2.5 sm:gap-3 font-mono text-xs transition-opacity duration-700 ${
+          phase === 2 ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
+      >
         {/* 微信快速复制 */}
         <button
           onClick={copyWechat}

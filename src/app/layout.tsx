@@ -22,14 +22,14 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   alternates: { canonical: "/" },
-  title: "智宇 ZYY · AI 创作者 — 做工具，也分享经验与思考",
+  title: "智宇 ZYY — Hello，我是智宇",
   description:
-    "AI 创作者智宇 (ZYY) 的个人档案：做解决问题的实用工具，也毫无保留地分享经验与思考思路。宇奇引擎 (10万+ 用户)、多智能体编排调度器、代码库拓扑导图等 AI 与系统工具。",
+    "Hello，我是智宇。把懂的、解决过的问题做成工具，借 AI 之力做以前做不到的事。宇奇引擎 (10万+ 用户)、多智能体编排调度器等 AI 与系统工具作品档案。",
   openGraph: {
     url: "/",
-    title: "智宇 ZYY · AI 创作者 — 做工具，也分享经验与思考",
+    title: "智宇 ZYY — Hello，我是智宇",
     description:
-      "一个希望用自己经验帮到普通人的普通人。做解决问题的实用工具，也毫无保留地分享经验与思考思路。",
+      "把懂的、解决过的问题做成工具，借 AI 之力做以前做不到的事。",
     type: "website",
     siteName: "智宇 ZYY",
     images: [

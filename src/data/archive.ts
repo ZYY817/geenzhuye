@@ -235,8 +235,8 @@ export const SYSTEM_METRICS = {
   handle: "ZYY817",
   title: "APPLIED AI · PRODUCT BUILDER & SYSTEMS CRAFTSPERSON",
   status: "ACTIVE // CALIBRATED",
-  bio: "用 AI 创造，做解决问题的实用工具，也毫无保留地分享经验与思考思路。一个希望用自己的经验帮到普通人的普通人。",
-  manifesto: "先理解，再选择；可验证，也可恢复。",
+  bio: "Hello，我是智宇。把懂的、解决过的问题做成工具，借 AI 之力做以前做不到的事。",
+  manifesto: "把懂的、解决过的问题做成工具，借 AI 之力做以前做不到的事。",
   coordinates: "31°13'N 121°28'E",
   socials: {
     github: "https://github.com/ZYY817",
