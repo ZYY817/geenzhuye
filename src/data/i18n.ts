@@ -1,0 +1,180 @@
+export type Lang = "zh" | "en";
+
+export const UI = {
+  zh: {
+    archiveTag: "项目档案",
+    collapse: "收起详情",
+    demo: "在线体验",
+    github: "GitHub",
+    quark: "网盘下载",
+    simPreview: "仿真预览",
+    live: "已上线",
+    oss: "开源",
+    ossFull: "开源发布",
+    stable: "稳定",
+    stableFull: "稳定运行",
+    heroLine1: "Hello，我是智宇。",
+    heroLine2: "白天是车企数字营销领域的系统负责人，晚上是用 AI 打造趁手工具的独立开发者。",
+    statInstalls: "优化工具安装量",
+    statStars: "GitHub Stars",
+    statTools: "自研工具",
+    wechat: "微信",
+    email: "邮箱",
+    contact: "联系",
+    groups: ["主要项目", "AI 技能与知识库", "实用小工具"],
+    projectNavigation: "全部项目",
+    backToArchive: "返回项目列表",
+    wheelHint: "滚轮 / ↑↓ 切换项目",
+    prevProject: "上一个",
+    nextProject: "下一个",
+    city: "深圳",
+    updated: "更新于",
+    copied: "已复制",
+    footerLine: "如果工具帮到了你，欢迎来聊聊。",
+    wechatCopied: "微信号已复制",
+    statToolsLine: "自研与开源工具",
+    statN: (n: number) => `${n} 款`,
+    role: "AI 产品方向",
+    openToWork: "正在看新机会",
+    navArchive: "归档",
+    navAbout: "关于",
+    capsLine: "产品定义 · AI 工程 · 交互设计",
+    aboutEntry: "更多关于我",
+    archiveNote: "这里的每一项都始于我遇到的真实问题，由 AI 协作完成并持续迭代——其中宇奇引擎已被真实安装 100,000+ 次。它们证明的不是体量，而是从问题到可用的完整路径。",
+  },
+  en: {
+    archiveTag: "Archive",
+    collapse: "Close details",
+    demo: "Live demo",
+    github: "GitHub",
+    quark: "Download",
+    simPreview: "Sim preview",
+    live: "Live",
+    oss: "OSS",
+    ossFull: "Open source",
+    stable: "Stable",
+    stableFull: "Stable",
+    heroLine1: "Hello, I'm Zhiyu.",
+    heroLine2: "By day I lead digital-marketing systems at an automaker; by night I craft handy tools with AI.",
+    statInstalls: "Tool installs",
+    statStars: "GitHub Stars",
+    statTools: "Tools built",
+    wechat: "WeChat",
+    email: "Email",
+    contact: "Contact",
+    groups: ["Projects", "Skills & Knowledge", "Utilities"],
+    projectNavigation: "All projects",
+    backToArchive: "Back to all projects",
+    wheelHint: "Scroll / ↑↓ to switch",
+    prevProject: "Previous",
+    nextProject: "Next",
+    city: "Shenzhen",
+    updated: "Updated",
+    copied: "Copied",
+    footerLine: "If a tool helped you, come say hi.",
+    wechatCopied: "WeChat ID copied",
+    statToolsLine: "self-built & open-source",
+    statN: (n: number) => `${n}`,
+    role: "AI Product",
+    openToWork: "Open to new opportunities",
+    navArchive: "Archive",
+    navAbout: "About",
+    capsLine: "Product · AI Engineering · Interaction",
+    aboutEntry: "More about me",
+    archiveNote: "Each one started from a real problem I hit, built with AI and iterated in use — YuqiEngine alone has 100,000+ real installs. What they prove isn't scale, but the full path from problem to usable product.",
+  },
+} as const;
+
+export const EN_PROJECTS: Record<string, { title: string; tagline: string; description: string; category: string }> = {
+  "yuqi-engine": {
+    title: "YuqiEngine",
+    tagline: "Game performance booster — system check, tune, revert",
+    description:
+      "A Windows game-optimization engine that inspects real system state first, applies reversible tuning, and restores with one click. 100,000+ installs.",
+    category: "Flagship tool",
+  },
+  "agent-project-map": {
+    title: "Agent Project Map",
+    tagline: "Repo topology in one glance",
+    description:
+      "Maps any codebase into an interactive topology graph — modules, dependencies and entry points rendered as a navigable atlas for AI agents and humans.",
+    category: "Dev tool",
+  },
+  "yuqi-team-orchestrator": {
+    title: "Yuqi Team Orchestrator",
+    tagline: "Multi-agent scheduling console",
+    description:
+      "An orchestrator that dispatches tasks across multiple AI agents — queueing, dependencies and progress made visible in one control surface.",
+    category: "AI infra",
+  },
+  "qilan-atlas": {
+    title: "Qilan Atlas",
+    tagline: "537 design concepts + 264 interface styles",
+    description:
+      "A browsable design atlas: 537 distilled design concepts and 264 interface style references, organized for fast lookup and inspiration.",
+    category: "Design base",
+  },
+  "spec-forge": {
+    title: "Spec Forge",
+    tagline: "Turn vague asks into buildable specs",
+    description:
+      "A requirement-forging bench that converts fuzzy ideas into structured, agent-ready specifications before any code is written.",
+    category: "Dev tool",
+  },
+  "zy-anti-slop-frontend-design": {
+    title: "Anti-Slop Frontend Design",
+    tagline: "A knowledge base against generic AI UI",
+    description:
+      "A curated frontend design knowledge base teaching AI to produce distinctive, non-generic interfaces — rules, patterns and anti-patterns.",
+    category: "Knowledge",
+  },
+  "yike-album-downloader": {
+    title: "Yike Album Downloader",
+    tagline: "Batch-download your Yike albums",
+    description: "A small utility that batch-downloads photos from Yike albums before the service winds down.",
+    category: "Utility",
+  },
+  flyykjxzq: {
+    title: "FLYYKJXZQ",
+    tagline: "One-click trainer downloads",
+    description: "A quick-download helper for FLiNG game trainers — find, fetch, done.",
+    category: "Utility",
+  },
+  "yuqi-lite": {
+    title: "Yuqi Lite",
+    tagline: "A minimal, honest Windows background-app cleaner",
+    description:
+      "Translates cryptic process names into plain language and tells you what's safe to close. Groups by app rather than by process, re-checks the real state after closing and says so when something can't be stopped. Protection list, restart blocking, rule presets and startup management — offline, no data collected.",
+    category: "System tool",
+  },
+  "wanji-kit": {
+    title: "Wanji Kit",
+    tagline: "One-click check and install for game runtimes, official sources only",
+    description:
+      "Most games that won't launch are missing a runtime. One scan shows what's missing; one click installs it all: 32 checks across VC++, .NET, DirectX, WebView2 and common system tweaks, winget first with official Microsoft links as fallback, re-verified after install. Anything it can't install links straight to the official guide.",
+    category: "System tool",
+  },
+  "wanji-index": {
+    title: "Wanji Index",
+    tagline: "A Chinese index of PC game resources and tools, updated daily",
+    description:
+      "A searchable index of PC game resource sites, tools, guides, free offers and known issues. Pages, related lists, search index and sitemap are all generated from validated data at build time, with one publishing standard for every entry.",
+    category: "Live site",
+  },
+  "work-report-skill": {
+    title: "Work Report Skill",
+    tagline: "A fact-first, format-adaptive AI skill for Chinese work reports",
+    description:
+      "Turns scattered work notes into accurate, concise daily, weekly, monthly or milestone reports with clear status. Keeps every distinct item, never turns 'investigating' into 'fixed', never invents results — and adapts format to reader, channel and device.",
+    category: "AI skill",
+  },
+  "enterprise-efficiency-suite": {
+    title: "Enterprise AI Efficiency Suite",
+    tagline: "10+ workflow assistants, delivered privately",
+    description:
+      "A privately delivered enterprise toolkit: automated product copy, intelligent review assistants, record filtering, intent-based comment generation and more — ten-plus workflow assistants in production.",
+    category: "Enterprise",
+  },
+};
+
+export const YUQI_TABS_EN = ["System Check", "Game Tuning", "Recovery"] as const;

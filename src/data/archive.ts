@@ -39,14 +39,14 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     tagline: "面向 Windows 10 和 Windows 11 的模块化系统优化与状态检测工具。",
     description: "先读取系统当前真实的优化状态，再提供直观的可操作选项。你可以根据自己的需求自由开启或调整，实实在在提升系统流畅度与日常使用体验。",
     coverImage: "/yuqi/overview.png",
-    tags: ["C#", ".NET 8", "Win32", "WPF", "600+ Stars"],
+    tags: ["C#", ".NET 8", "Win32", "WPF", "660+ Stars"],
     specs: [
       { label: "LANGUAGE", value: "C# / .NET 8 Native x64" },
-      { label: "METRICS", value: "600+ GitHub Stars / 累计数万安装" },
+      { label: "METRICS", value: "660+ GitHub Stars / 累计数万安装" },
       { label: "PHILOSOPHY", value: "检测先行 · 可逆恢复 · 零流氓" },
     ],
     links: {
-      website: "https://yuqiengine.pages.dev/",
+      website: "https://zyy817.github.io/",
       github: "https://github.com/ZYY817/YuqiEngine",
       release: "https://github.com/ZYY817/YuqiEngine/releases",
       bilibili: "https://space.bilibili.com/41173761",
@@ -54,8 +54,96 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     },
   },
   {
-    id: "agent-project-map",
+    id: "yuqi-lite",
     index: "02",
+    title: "宇奇轻管",
+    englishTitle: "Yuqi Lite",
+    year: "2026",
+    category: "SYSTEM",
+    categoryLabel: "后台应用清理 / 自启治理",
+    status: "OPEN SOURCE",
+    tagline: "极简、诚实的 Windows 后台应用清理工具。",
+    description: "把看不懂的进程名翻译成人话，告诉你哪些能关、哪些不该碰。按应用归组而不是按进程；结束后延迟复核真实状态，杀不掉的就直说，不把失败包装成「已关闭」。支持保护名单、禁止自动重启、模式规则与自启治理，不联网、不收集数据。",
+    tags: ["C#", ".NET 8", "Windows", "Process Management"],
+    specs: [
+      { label: "PLATFORM", value: "Windows 10 / 11 x64" },
+      { label: "PRINCIPLE", value: "如实复核 · 不碰系统关键进程 · 不联网" },
+      { label: "DISTRIBUTION", value: "MSI 安装版 / 免安装绿色版" },
+    ],
+    links: {
+      github: "https://github.com/ZYY817/yuqi-lite",
+      release: "https://github.com/ZYY817/yuqi-lite/releases",
+    },
+  },
+  {
+    id: "aimframe",
+    index: "14",
+    title: "AimFrame 准框",
+    englishTitle: "AimFrame",
+    year: "2026",
+    category: "SYSTEM",
+    categoryLabel: "显示缩放 / FPS 比赛屏尺寸",
+    status: "OPEN SOURCE",
+    tagline: "把 27 寸、32 寸大屏在显卡层面缩成 24.5 寸比赛屏尺寸。",
+    description: "选好尺寸点应用，玩完点还原。NVIDIA 走驱动级自定义分辨率，AMD / Intel 走系统缩放，所有显卡都能用窗口模式。15 秒不确认自动还原，另有应急还原热键。",
+    tags: ["C#", ".NET 8", "WPF", "NVAPI"],
+    specs: [
+      { label: "PLATFORM", value: "Windows 10 / 11 x64" },
+      { label: "MODES", value: "驱动级 / 系统缩放 / 仅游戏窗口" },
+      { label: "SAFETY", value: "15 秒自动还原 · 应急还原热键" },
+    ],
+    links: {
+      github: "https://github.com/ZYY817/ScreenSizer",
+      release: "https://github.com/ZYY817/ScreenSizer/releases/latest",
+    },
+  },
+  {
+    id: "wanji-kit",
+    index: "03",
+    title: "玩机装机工具",
+    englishTitle: "Wanji Kit",
+    year: "2026",
+    category: "SYSTEM",
+    categoryLabel: "游戏运行环境 / 一键检测安装",
+    status: "OPEN SOURCE",
+    tagline: "游戏运行库一键检测与安装，全部走官方渠道。",
+    description: "游戏打不开，多半是缺运行库。扫一遍就知道缺什么，点一下自动装齐：32 项检测覆盖 VC++、.NET、DirectX、WebView2 等运行库和常用系统优化项，winget 优先、微软官方直链兜底，装完逐项重扫验证；装不了的直接给出官方指引，不留死路。",
+    tags: ["Flutter", "Dart", "Windows", "winget"],
+    specs: [
+      { label: "CHECKS", value: "32 项运行库与系统优化" },
+      { label: "SOURCE", value: "winget 优先 · 官方直链兜底" },
+      { label: "PLATFORM", value: "Windows 10 / 11 x64 · 免安装" },
+    ],
+    links: {
+      github: "https://github.com/ZYY817/wanji-kit",
+      release: "https://github.com/ZYY817/wanji-kit/releases",
+    },
+  },
+  {
+    id: "wanji-index",
+    index: "04",
+    title: "玩机索引",
+    englishTitle: "Wanji Index",
+    year: "2026",
+    category: "DEV TOOL",
+    categoryLabel: "游戏资源索引 / 静态站点",
+    status: "LIVE",
+    tagline: "中文 PC 游戏资源与工具索引，每日自动更新。",
+    description: "把 PC 游戏的资源站、工具、教程、免费情报和常见问题整理成一个可检索的索引站。页面、关联列表、搜索索引和站点地图都由数据在构建时生成，每条内容经过统一的校验和发布标准。",
+    tags: ["Next.js", "TypeScript", "Static Export", "Data Validation"],
+    specs: [
+      { label: "CONTENT", value: "游戏 / 资源站 / 工具 / 教程 / 免费情报 / 排障" },
+      { label: "PIPELINE", value: "Schema 校验 → 静态导出 → 每日自动更新" },
+      { label: "STACK", value: "Next.js 16 · React 19 · Tailwind CSS v4" },
+    ],
+    links: {
+      demo: "https://zyy817.github.io/wanji-index/",
+      github: "https://github.com/ZYY817/wanji-index",
+    },
+  },
+  {
+    id: "agent-project-map",
+    index: "05",
     title: "代码库拓扑导图",
     englishTitle: "Agent Project Map",
     year: "2026",
@@ -64,7 +152,6 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     status: "STABLE",
     tagline: "让各种 AI IDE 能够精准找到目标代码的项目地图。",
     description: "通过给代码库建立轻量索引与锚点，帮助 Cursor、Windsurf、Claude Code 等 AI 编程工具快速定位代码位置与业务逻辑，降低寻找代码时的损耗，减少大模型上下文浪费。",
-    coverImage: "/yuqi/agent-map-preview.png",
     tags: ["Agent Memory", "Single-file", "Zero Dependency", "Codebase Map"],
     specs: [
       { label: "FOOTPRINT", value: "Zero Dependencies / Single File" },
@@ -77,7 +164,7 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
   },
   {
     id: "yuqi-team-orchestrator",
-    index: "03",
+    index: "06",
     title: "多智能体编排调度器",
     englishTitle: "Yuqi Team Orchestrator",
     year: "2026",
@@ -94,12 +181,33 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
       { label: "LANGUAGE", value: "TypeScript" },
     ],
     links: {
-      github: "https://github.com/ZYY817/Yuqi-Team-Orchestrator",
+      github: "https://github.com/ZYY817/dsh-team-orchestrator",
+    },
+  },
+  {
+    id: "yuqi-token-guardian",
+    index: "15",
+    title: "Token Guardian",
+    englishTitle: "Token Guardian",
+    year: "2026",
+    category: "AGENT",
+    categoryLabel: "Token 成本 / 已归档复盘",
+    status: "RESEARCH",
+    tagline: "试图减少 DeepSeek 思维链重复计费的插件，实测没有效果，保留为复盘。",
+    description: "DeepSeek Harness 插件。压缩回放的思维链、去重工具结果、给机械步骤降思考档位；实测账单收益未被证明，核心机制反而让缓存失效，已归档。",
+    tags: ["TypeScript", "DeepSeek Harness", "Postmortem"],
+    specs: [
+      { label: "STATUS", value: "已归档 · 不再维护" },
+      { label: "FINDING", value: "约 93% 回放内容本就按缓存价计费" },
+      { label: "LICENSE", value: "MIT" },
+    ],
+    links: {
+      github: "https://github.com/ZYY817/yuqi-token-guardian",
     },
   },
   {
     id: "qilan-atlas",
-    index: "04",
+    index: "07",
     title: "奇览",
     englishTitle: "Qilan",
     year: "2026",
@@ -121,7 +229,7 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
   },
   {
     id: "spec-forge",
-    index: "05",
+    index: "08",
     title: "需求锻造台",
     englishTitle: "SpecForge",
     year: "2026",
@@ -130,7 +238,6 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     status: "OPEN SOURCE",
     tagline: "专门用来写规范需求单与产品文档的 AI Skill。",
     description: "平时把自己写需求单时最看重的思考要点和规则整理成了一个 Skill。面对零散的想法、会议记录或对话，能快速梳理出真正的问题并沉淀为规范、可执行的产品需求文档。",
-    coverImage: "/yuqi/overview.png",
     tags: ["AI Skill", "Prompt Architecture", "PRD Engineering", "Bilingual"],
     specs: [
       { label: "TYPE", value: "Customizable AI Agent Skill" },
@@ -142,8 +249,29 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     },
   },
   {
+    id: "work-report-skill",
+    index: "09",
+    title: "工作汇报 Skill",
+    englishTitle: "Work Report Skill",
+    year: "2026",
+    category: "AI SKILL",
+    categoryLabel: "周期汇报 / 写作 Skill",
+    status: "OPEN SOURCE",
+    tagline: "事实优先、格式自适应的中文工作汇报 AI Skill。",
+    description: "把零散的工作记录整理成真实、精简、状态清楚的日报、周报、月报或阶段汇报。保留每一个独立事项，不把「排查中」写成「已解决」，也不为了显得高级而制造成果；会按读者、渠道和设备调整格式。",
+    tags: ["AI Skill", "Markdown", "Zero Dependency", "Chinese Writing"],
+    specs: [
+      { label: "OUTPUT", value: "日报 / 周报 / 双周报 / 月报 / 阶段汇报" },
+      { label: "PRINCIPLE", value: "事实优先 · 不虚构成果" },
+      { label: "FOOTPRINT", value: "纯 Markdown / YAML / JSON，无运行时依赖" },
+    ],
+    links: {
+      github: "https://github.com/ZYY817/work-report-skill",
+    },
+  },
+  {
     id: "zy-anti-slop-frontend-design",
-    index: "06",
+    index: "10",
     title: "AI 前端反平庸设计知识库",
     englishTitle: "Anti-Slop Frontend Design",
     year: "2026",
@@ -152,7 +280,6 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     status: "OPEN SOURCE",
     tagline: "避免生成千篇一律模板的前端 AI 提示词与规则指南。",
     description: "把平时沉淀下来的高品质前端描述词和视觉规范整理成清晰的规则表，让 AI 理解排版、间距、动效等设计限制，做出更精致、有辨识度且真正可用的现代网页。",
-    coverImage: "/yuqi/game-opt.png",
     tags: ["Frontend Aesthetics", "Anti-Template", "Design Tokens", "Knowledge Base"],
     specs: [
       { label: "STANDARD", value: "Awwwards / Production Ready UI" },
@@ -165,7 +292,7 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
   },
   {
     id: "yike-album-downloader",
-    index: "07",
+    index: "11",
     title: "一刻相册批量下载工具",
     englishTitle: "Yike Album Downloader",
     year: "2026",
@@ -174,7 +301,6 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     status: "OPEN SOURCE",
     tagline: "百度一刻相册照片与视频批量导出工具。",
     description: "突破网页版限制，多线程按原始画质批量高速下载照片和视频，完整保留拍摄时间，方便本地备份个人数字资产。",
-    coverImage: "/yuqi/overview.png",
     tags: ["Python", "Batch Downloader", "Media Automation", "Open Source"],
     specs: [
       { label: "CORE", value: "Multi-thread Lossless Pipeline" },
@@ -187,7 +313,7 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
   },
   {
     id: "flyykjxzq",
-    index: "08",
+    index: "12",
     title: "风灵月影修改器快捷下载器",
     englishTitle: "FLYYKJXZQ",
     year: "2025",
@@ -196,7 +322,6 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     status: "OPEN SOURCE",
     tagline: "单机游戏修改器纯净直链快速提取工具。",
     description: "自动抓取并直接提取官方修改器的真实下载链接，无需在繁琐的网页中到处寻找或点击广告，一键直接下载。",
-    coverImage: "/yuqi/game-opt.png",
     tags: ["Python", "Web Crawler", "Automation", "Utility"],
     specs: [
       { label: "TYPE", value: "AI-Generated Utility Tool" },
@@ -210,7 +335,7 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
   },
   {
     id: "enterprise-efficiency-suite",
-    index: "09",
+    index: "13",
     title: "企业自动化增效工具集",
     englishTitle: "Enterprise AI Efficiency Suite",
     year: "2025",
@@ -219,7 +344,6 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     status: "STABLE",
     tagline: "为企业在重复工作流程中搭建的十余款 AI 自动化助手。",
     description: "把企业里高频、重复、消耗人力的流程逐个拆成自动化小工具：商品文案自动生成、智能评价助手、批量记录筛选、按意图生成评论等十余款。面向企业内部交付，无对外公开演示，但流程拆解与自动化的方法论可复用到任何重复性工作流。",
-    coverImage: "/yuqi/overview.png",
     tags: ["Enterprise Automation", "AI Workflow", "10+ Assistants", "Private Delivery"],
     specs: [
       { label: "SCALE", value: "十余款自动化助手" },
@@ -229,6 +353,12 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     links: {},
   },
 ];
+
+/** 首页分组：按编号连续区间切分（01–07 / 08–10 / 11–13），标签见 UI.groups */
+export const PROJECT_GROUPS: [number, number][] = [[0, 7], [7, 10], [10, 13]];
+
+/** 页脚"更新于"日期，发版时手动更新 */
+export const LAST_UPDATED = "2026.11";
 
 export const SYSTEM_METRICS = {
   authorName: "智宇",

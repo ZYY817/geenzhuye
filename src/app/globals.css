@@ -1,91 +1,86 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* 正文走系统字体：Mac 用苹方 / SF，Windows 用雅黑 UI / Segoe UI——都带屏幕微调（hinting）。
+   * 不再用 Noto Sans SC 网页字体：实测它在 Windows 普通屏（DPR=1）上没有微调、笔画发灰发虚，
+   * Mac 视网膜屏把问题掩盖了。数字与标签仍走 Geist Mono，中文回落到同一组系统字体。 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace, "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei";
+}
+
+/* 唯一强调色：只用于关键数字、当前序号、可点击的方向提示——全站一处 token 可换 */
+@theme inline {
+  --color-accent: var(--accent);
+}
+
 @layer base {
   :root {
-    /* ============================================================== */
-    /* DTCG 2025.10 规范：三层 DESIGN TOKENS 系统体系                  */
-    /* ============================================================== */
-
-    /* ------------------------------------------------------------ */
-    /* Level 1: Primitive Tokens (基础物理常量)                      */
-    /* ------------------------------------------------------------ */
-    --primitive-bone-50: #ffffff;
-    --primitive-bone-100: #ffffff;
-    --primitive-bone-200: #fafafa;
-    --primitive-ink-900: #1d1d1f;
-    --primitive-ink-800: #2d2d2f;
-    --primitive-ink-600: #424245;
-    --primitive-ink-500: #555558; /* 优化对比度至 4.7:1 (WCAG 2.2 AA) */
-    --primitive-amber-500: #d97706;
-    --primitive-emerald-500: #059669;
-
-    /* ------------------------------------------------------------ */
-    /* Level 2: Semantic Tokens (全站语义化语境基准)                 */
-    /* ------------------------------------------------------------ */
-    --surface-ground: #ffffff;
-    --surface-monograph: #ffffff;
-    --surface-prismatic-card: #ffffff;
+    --accent: #2a3bff;
     --bg-page: #ffffff;
     --bg-card: #ffffff;
+    --text-primary: #18181b;
+    --text-secondary: #52525b;
+    --text-muted: #71717a;
+    --border-subtle: rgba(24, 24, 27, 0.06);
+    --border-hover: rgba(24, 24, 27, 0.16);
+    --selection-bg: #18181b;
+    --selection-text: #ffffff;
+    --focus-ring-color: rgba(24, 24, 27, 0.85);
+    --focus-ring-offset: 2px;
+  }
 
-    --text-primary: var(--primitive-ink-900);
-    --text-main: var(--primitive-ink-900);
-    --text-body: var(--primitive-ink-600);
-    --text-secondary: var(--primitive-ink-600);
-    --text-muted: var(--primitive-ink-500);
-    --text-tertiary: var(--primitive-ink-500);
-    --text-accent: var(--primitive-amber-500);
-    --text-success: var(--primitive-emerald-500);
-
-    --border-subtle: rgba(29, 29, 31, 0.08);
-    --border-color: rgba(29, 29, 31, 0.08);
-    --border-hover: rgba(29, 29, 31, 0.22);
-    --accent: var(--primitive-ink-900);
-
-    /* ------------------------------------------------------------ */
-    /* Level 3: Component Tokens (组件专用工程契约)                 */
-    /* ------------------------------------------------------------ */
-    --works-triptych-split: 58fr 27fr 15fr;
-    --focus-ring-color: rgba(29, 29, 31, 0.85);
+  .dark {
+    --accent: #8f9bff;
+    --bg-page: #09090b;
+    --bg-card: #121215;
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    --border-subtle: rgba(255, 255, 255, 0.07);
+    --border-hover: rgba(255, 255, 255, 0.18);
+    --selection-bg: #fafafa;
+    --selection-text: #09090b;
+    --focus-ring-color: rgba(255, 255, 255, 0.85);
     --focus-ring-offset: 2px;
   }
 
   html {
-    background-color: #070709;
-    color: #f4f4f5;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
     font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
-    -webkit-font-smoothing: antialiased;
+    -webkit-font-smoothing: auto;
     -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+    text-rendering: auto;
     min-height: 100%;
     width: 100%;
   }
 
   body {
-    background-color: #070709;
-    color: #f4f4f5;
-    overflow-x: hidden;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    overflow-x: clip;
     min-height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    font-family: var(--font-sans);
   }
 
   ::selection {
-    background-color: var(--primitive-ink-900);
-    color: #ffffff;
+    background-color: var(--selection-bg);
+    color: var(--selection-text);
   }
 
-  /* 全局无障碍可见焦点环 (WCAG 2.2 AA 合规) */
   :focus-visible {
     outline: 2px solid var(--focus-ring-color);
     outline-offset: var(--focus-ring-offset);
-    border-radius: 6px;
+    border-radius: 4px;
   }
 }
 
-/* Apple 级超纤细温润滚动条 (深黑适配) */
+/* Apple 级超纤细温润滚动条 (深浅双色适配) */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -94,45 +89,23 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(24, 24, 27, 0.18);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
+  background: rgba(24, 24, 27, 0.32);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.32);
 }
 
 /* 电影级双向无限流动经纬字带关键帧 (GPU 合成器纯硬件加速) */
-@keyframes marquee-flow-left {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
 
-@keyframes marquee-flow-right {
-  0% {
-    transform: translate3d(-50%, 0, 0);
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-}
 
-.animate-marquee-left {
-  display: flex;
-  width: max-content;
-  will-change: transform;
-  animation: marquee-flow-left var(--marquee-duration, 40s) linear infinite;
-}
 
-.animate-marquee-right {
-  display: flex;
-  width: max-content;
-  will-change: transform;
-  animation: marquee-flow-right var(--marquee-duration, 40s) linear infinite;
-}
 
 /* 全局尊重操作系统减弱动态偏好 (prefers-reduced-motion) */
 @media (prefers-reduced-motion: reduce) {
@@ -152,50 +125,19 @@
 }
 
 /* 智能体任务拓扑激光脉冲流动画 */
-@keyframes dashFlow {
-  from {
-    stroke-dashoffset: 28;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
 
 .animate-dash-flow {
-  animation: dashFlow 1.2s linear infinite;
 }
 
 /* 代码地图拓扑寻路激光束高精度循迹脉冲 (Hardware-accelerated Beam Flow) */
-@keyframes beamFlow {
-  0% {
-    stroke-dashoffset: 280;
-    opacity: 0.2;
-  }
-  25% {
-    opacity: 1;
-  }
-  75% {
-    opacity: 1;
-  }
-  100% {
-    stroke-dashoffset: -30;
-    opacity: 0.2;
-  }
-}
 
 .animate-beam-flow {
-  animation: beamFlow 2.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .group:hover .animate-beam-flow {
-  animation: beamFlow 1.6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 /* 屏外区块渲染隔离：浏览器跳过视口外作品的排版与绘制，滚动更顺滑 */
-.work-section {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 680px;
-}
 
 /* Hydration 兜底：只展开显式标记的入场元素，不依赖 Framer Motion 行内样式序列 */
 .reveal-fallback [data-fallback-reveal] {
@@ -209,3 +151,24 @@
   opacity: 0 !important;
 }
 
+
+/* 主题圆形扩散：关闭默认交叉淡化，切换期间冻结颜色过渡（否则圆内会再淡入一次） */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+.theme-switching,
+.theme-switching * {
+  transition: none !important;
+}
+/* 快照捕获时剔除最贵的两层：整页噪点栅格与吸顶毛玻璃——实测可省首帧大部分耗时 */
+.theme-switching .grain-overlay {
+  display: none !important;
+}
+.theme-switching .backdrop-blur-md {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+@keyframes caret-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }

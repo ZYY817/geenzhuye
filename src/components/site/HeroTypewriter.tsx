@@ -1,31 +1,76 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
-import { ArrowUpRight, Copy, Check, MessageSquare } from "lucide-react";
-import { SYSTEM_METRICS } from "@/data/archive";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ARCHIVE_PROJECTS } from "@/data/archive";
+import { EN_PROJECTS, type Lang } from "@/data/i18n";
+import { EASE_SILK, EASE_EXIT } from "@/components/site/motion";
 
 /* ============================================================================
- * 开场打字机 (Hero Typewriter) — 智宇专属自述
+ * 开场 (Hero) — 智宇专属自述
  * ----------------------------------------------------------------------------
- * 1. 原生拟人打字手感：随机击键 + 标点停顿 + 光标呼吸退出。
- * 2. 状态安全：StrictMode / 路由切换 / 缓存状态绝不重复打字。
- * 3. 敲击完成后轻柔浮现快捷入口（微信快速复制 / B站 / 抖音 / GitHub / 邮箱）。
+ * 时间线（首访，自首帧起）：
+ *   0.20s  第一行开始击键（26–48ms/字，标点 +160ms）
+ *   ≈1.05s 第一行落定 → onReady（身份行、数据、索引依此编排）
+ *   1.05s  第二行逐字升起（12ms/字错峰，0.6s）——不再打字：
+ *          两行都打字时第二行要到 3.9s 才完，招聘方 10 秒扫读里太慢
+ * 回访（缓存命中）：不重播，直接 onReady。
  * ==========================================================================*/
 
-const HERO_LINE_1 = "Hello，我是智宇。";
-const HERO_LINE_2 = "把我懂的经验和思考，借助 AI 去帮到更多的人。";
+const HERO_LINES = {
+  zh: ["Hello，我是智宇。", { pre: "把经验做成", post: "，帮到更多的人。" }],
+  en: ["Hello, I'm Zhiyu.", { pre: "Turning experience into", post: " — helping more people." }],
+} as const;
 
 let heroCompletionCache = false;
+export const isHeroDone = () => heroCompletionCache;
 
-export function HeroTypewriter({ onReady }: { onReady?: () => void }) {
+/* ---------------------------------------------------------------------------
+ * 词槽 (Word Slot) —— 第二行自述里的活目录：每 ~2.2s 翻一个作品名，
+ * 蓝色、可点击直达详情。一句话看完，等于翻完了整个档案。
+ * -------------------------------------------------------------------------*/
+const SLOT_MS = 2200;
+
+function WordSlot({ lang, onPick }: { lang: Lang; onPick?: (id: string) => void }) {
+  const [i, setI] = useState(0);
   const reduced = useReducedMotion();
-  const cached = heroCompletionCache;
-  const [count1, setCount1] = useState(cached ? HERO_LINE_1.length : 0);
-  const [count2, setCount2] = useState(cached ? HERO_LINE_2.length : 0);
-  const [phase, setPhase] = useState<0 | 1 | 2>(cached ? 2 : 0); // 0=敲第一行 1=敲第二行 2=完成
-  const [copiedWechat, setCopiedWechat] = useState(false);
-  const [copiedEmail, setCopiedEmail] = useState(false);
+  useEffect(() => {
+    if (reduced) return;
+    const t = window.setInterval(() => setI((v) => (v + 1) % ARCHIVE_PROJECTS.length), SLOT_MS);
+    return () => window.clearInterval(t);
+  }, [reduced]);
+  const p = ARCHIVE_PROJECTS[i];
+  const title = (lang === "en" ? EN_PROJECTS[p.id]?.title : undefined) ?? p.title;
+  return (
+    <button
+      type="button"
+      onClick={() => onPick?.(p.id)}
+      title={title}
+      className="group mx-[0.15em] inline-flex cursor-pointer overflow-hidden align-baseline font-semibold text-accent underline decoration-accent/40 underline-offset-[5px] transition-colors hover:decoration-accent"
+    >
+      <motion.span layout="position" transition={{ layout: { duration: 0.3, ease: EASE_SILK } }} className="inline-flex">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={title}
+            initial={reduced ? { opacity: 0 } : { y: "72%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1, transition: { duration: 0.32, ease: EASE_SILK } }}
+            exit={reduced ? { opacity: 0, transition: { duration: 0.12 } } : { y: "-72%", opacity: 0, transition: { duration: 0.18, ease: EASE_EXIT } }}
+            className="inline-block whitespace-nowrap"
+          >
+            {title}
+          </motion.span>
+        </AnimatePresence>
+      </motion.span>
+    </button>
+  );
+}
+
+export function HeroTypewriter({ onReady, lang = "zh", onPick }: { onReady?: () => void; lang?: Lang; onPick?: (id: string) => void }) {
+  const [HERO_LINE_1, LINE_2] = HERO_LINES[lang];
+  const reduced = useReducedMotion();
+  const [cached] = useState(() => heroCompletionCache);
+  const [count, setCount] = useState(cached ? HERO_LINE_1.length : 0);
+  const [done, setDone] = useState(cached);
   const onReadyRef = useRef(onReady);
 
   useEffect(() => {
@@ -37,194 +82,54 @@ export function HeroTypewriter({ onReady }: { onReady?: () => void }) {
       onReadyRef.current?.();
       return;
     }
-
     const timers: number[] = [];
-    const later = (fn: () => void, ms: number) => {
-      timers.push(window.setTimeout(fn, ms));
+    const later = (fn: () => void, ms: number) => { timers.push(window.setTimeout(fn, ms)); };
+    const finish = () => {
+      setCount(HERO_LINE_1.length);
+      setDone(true);
+      heroCompletionCache = true;
+      onReadyRef.current?.();
     };
-
     if (reduced) {
-      later(() => {
-        setCount1(HERO_LINE_1.length);
-        setCount2(HERO_LINE_2.length);
-        setPhase(2);
-        heroCompletionCache = true;
-        onReadyRef.current?.();
-      }, 0);
+      later(finish, 0);
       return () => timers.forEach(window.clearTimeout);
     }
-
-    // 拟人击键：基础 22–45ms，标点处自然换气停顿
-    const keystrokeDelay = (ch: string) =>
-      22 + Math.random() * 25 + (/[，。、；！？…]/.test(ch) ? 160 : 0);
-
-    const typeLine = (line: string, set: (n: number) => void, done: () => void) => {
-      const step = (idx: number) => {
-        set(idx);
-        if (idx >= line.length) {
-          done();
-          return;
-        }
-        later(() => step(idx + 1), keystrokeDelay(line[idx]));
-      };
-      step(0);
+    const keystrokeDelay = (ch: string) => 26 + Math.random() * 22 + (/[，。、,.]/.test(ch) ? 160 : 0);
+    const step = (idx: number) => {
+      setCount(idx);
+      if (idx >= HERO_LINE_1.length) { later(finish, 60); return; }
+      later(() => step(idx + 1), keystrokeDelay(HERO_LINE_1[idx]));
     };
-
-    // 0.28s 静止后落笔第一行
-    later(() => {
-      typeLine(HERO_LINE_1, setCount1, () => {
-        setPhase(1);
-        later(() => {
-          typeLine(HERO_LINE_2, setCount2, () => {
-            setPhase(2);
-            heroCompletionCache = true;
-            later(() => onReadyRef.current?.(), 220);
-          });
-        }, 180);
-      });
-    }, 280);
-
+    later(() => step(0), 200);
     return () => timers.forEach(window.clearTimeout);
-  }, [reduced]);
-
-  const copyWechat = () => {
-    const wx = SYSTEM_METRICS.socials.wechat || "zhiyuydyh";
-    navigator.clipboard?.writeText(wx).catch(() => {});
-    setCopiedWechat(true);
-    window.setTimeout(() => setCopiedWechat(false), 2200);
-  };
-
-  const copyEmail = () => {
-    navigator.clipboard?.writeText(SYSTEM_METRICS.socials.email).catch(() => {});
-    setCopiedEmail(true);
-    window.setTimeout(() => setCopiedEmail(false), 2200);
-  };
-
-  const cursorCls =
-    "inline-block w-[2px] h-[0.85em] bg-white align-baseline transition-opacity duration-700";
+  }, [reduced, HERO_LINE_1]);
 
   return (
     <div className="space-y-4 sm:space-y-5">
-      {/* 核心第一句：内敛纯白 */}
-      <h1 className="text-2xl sm:text-[1.85rem] font-light tracking-tight text-white leading-snug">
+      <h1 className="text-3xl sm:text-5xl font-medium tracking-[-0.02em] text-neutral-950 dark:text-white leading-snug [text-wrap:balance]">
         <span className="sr-only">{HERO_LINE_1}</span>
         <span id="hero-line-1" aria-hidden="true">
-          {HERO_LINE_1.slice(0, count1)}
+          {done ? HERO_LINE_1 : HERO_LINE_1.slice(0, count)}
         </span>
-        {phase === 0 && (
-          <span
-            aria-hidden="true"
-            data-motion-decoration
-            className={`${cursorCls} ml-2 shadow-[0_0_8px_rgba(255,255,255,0.8)]`}
-          />
-        )}
+        <span
+          aria-hidden="true"
+          data-motion-decoration
+          className={`ml-2 inline-block h-[0.82em] w-[3px] translate-y-[0.06em] bg-accent align-baseline transition-opacity duration-500 ${
+            done ? "opacity-0" : "animate-[caret-blink_1.1s_step-end_infinite]"
+          }`}
+        />
       </h1>
 
-      {/* 核心第二句：温润灰白 */}
-      <div className="text-sm sm:text-base text-neutral-400 font-light leading-relaxed min-h-[1.75rem]">
-        <span className="sr-only">{HERO_LINE_2}</span>
-        <span id="hero-line-2" aria-hidden="true">
-          {HERO_LINE_2.slice(0, count2)}
-        </span>
-        {phase >= 1 && (
-          <span
-            aria-hidden="true"
-            data-motion-decoration
-            className={`${cursorCls} w-[1.5px] ml-1.5 bg-neutral-300 ${
-              phase === 2 ? "opacity-0 delay-700" : "opacity-100"
-            }`}
-          />
+      <div className="text-base sm:text-lg text-neutral-600 dark:text-neutral-300 font-normal leading-relaxed min-h-[1.75rem] [text-wrap:pretty]">
+        {cached || done ? (
+          <span>
+            {LINE_2.pre}
+            <WordSlot lang={lang} onPick={onPick} />
+            {LINE_2.post}
+          </span>
+        ) : (
+          <span className="sr-only">{`${LINE_2.pre}…${LINE_2.post}`}</span>
         )}
-      </div>
-
-      {/* 快捷联系与入口行：一体化极简微磨砂 HUD 交互坞（告别塑料胶囊感与花哨 Emoji，极客高级融合） */}
-      <div
-        className={`pt-3 transition-opacity duration-700 ${
-          phase === 2 ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="inline-flex flex-wrap items-center gap-x-4 sm:gap-x-5 gap-y-2 rounded-full border border-white/[0.08] bg-white/[0.02] hover:border-white/[0.14] px-4 py-2 font-mono text-xs text-neutral-400 backdrop-blur-md transition-all duration-300 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_8px_20px_-6px_rgba(0,0,0,0.5)]">
-          {/* 在线信标 */}
-          <div className="flex items-center gap-1.5 text-neutral-500">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.8)] animate-pulse" />
-            <span className="text-[11px] tracking-wider text-neutral-400 font-normal">交流</span>
-          </div>
-
-          <span className="text-white/[0.1] select-none">/</span>
-
-          {/* 微信快速复制 */}
-          <button
-            onClick={copyWechat}
-            type="button"
-            className="hover:text-white transition-colors cursor-pointer flex items-center gap-1.5 group/wx"
-          >
-            <span className={copiedWechat ? "text-emerald-400 font-medium" : "text-neutral-300 group-hover/wx:text-white"}>
-              {copiedWechat ? `微信号已复制: ${SYSTEM_METRICS.socials.wechat}` : `微信 ${SYSTEM_METRICS.socials.wechat}`}
-            </span>
-            {copiedWechat ? (
-              <Check className="w-3 h-3 text-emerald-400" />
-            ) : (
-              <Copy className="w-3 h-3 opacity-30 group-hover/wx:opacity-90 transition-opacity" />
-            )}
-          </button>
-
-          <span className="text-white/[0.1] select-none">/</span>
-
-          {/* B站 */}
-          <a
-            href={SYSTEM_METRICS.socials.bilibili}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white text-neutral-300 transition-colors flex items-center gap-1 group/bili"
-          >
-            <span>Bilibili</span>
-            <ArrowUpRight className="w-3 h-3 opacity-40 group-hover/bili:opacity-100 group-hover/bili:translate-x-0.5 group-hover/bili:-translate-y-0.5 transition-all" />
-          </a>
-
-          <span className="text-white/[0.1] select-none">/</span>
-
-          {/* 抖音 */}
-          <a
-            href={SYSTEM_METRICS.socials.douyin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white text-neutral-300 transition-colors flex items-center gap-1 group/dy"
-          >
-            <span>抖音</span>
-            <ArrowUpRight className="w-3 h-3 opacity-40 group-hover/dy:opacity-100 group-hover/dy:translate-x-0.5 group-hover/dy:-translate-y-0.5 transition-all" />
-          </a>
-
-          <span className="text-white/[0.1] select-none">/</span>
-
-          {/* GitHub */}
-          <a
-            href={SYSTEM_METRICS.socials.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white text-neutral-300 transition-colors flex items-center gap-1 group/gh"
-          >
-            <span>GitHub</span>
-            <ArrowUpRight className="w-3 h-3 opacity-40 group-hover/gh:opacity-100 group-hover/gh:translate-x-0.5 group-hover/gh:-translate-y-0.5 transition-all" />
-          </a>
-
-          <span className="text-white/[0.1] select-none">/</span>
-
-          {/* 邮箱 */}
-          <button
-            onClick={copyEmail}
-            type="button"
-            className="hover:text-white text-neutral-300 transition-colors cursor-pointer flex items-center gap-1 group/em"
-          >
-            <span className={copiedEmail ? "text-emerald-400 font-medium" : ""}>
-              {copiedEmail ? "邮箱已复制" : "邮箱"}
-            </span>
-            {copiedEmail ? (
-              <Check className="w-3 h-3 text-emerald-400" />
-            ) : (
-              <Copy className="w-3 h-3 opacity-30 group-hover/em:opacity-90 transition-opacity" />
-            )}
-          </button>
-        </div>
       </div>
     </div>
   );

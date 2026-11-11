@@ -1,0 +1,10 @@
+public/_local
+node_modules
+.next
+.git
+.agents
+.claude
+screen.png
+tsconfig.tsbuildinfo
+.env*
+.vercel

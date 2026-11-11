@@ -1,11 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -13,7 +8,10 @@ const geistMono = Geist_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#050507",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fbfaf8" },
+    { media: "(prefers-color-scheme: dark)", color: "#121211" },
+  ],
 };
 
 const siteUrl =
@@ -22,14 +20,14 @@ const siteUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   alternates: { canonical: "/" },
-  title: "智宇 ZYY — Hello，我是智宇",
+  title: "智宇 — 用 AI 把想法做成软件与网页",
   description:
-    "Hello，我是智宇。把我懂的经验和思考，借助 AI 去帮到更多的人。宇奇引擎 (10万+ 用户)、多智能体编排调度器等 AI 与系统作品档案。",
+    "做产品出身，用 Claude 和 Cursor 把想法直接做成可用的软件与网页：宇奇引擎、宇奇轻管、玩机索引等 13 个项目。",
   openGraph: {
     url: "/",
-    title: "智宇 ZYY — Hello，我是智宇",
+    title: "智宇 — 用 AI 把想法做成软件与网页",
     description:
-      "把我懂的经验和思考，借助 AI 去帮到更多的人。",
+      "做产品出身，用 AI 把想法直接做成可用的软件与网页。",
     type: "website",
     siteName: "智宇 ZYY",
     images: [
@@ -43,9 +41,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "智宇 ZYY · AI 创作者 — 用 AI 创造",
+    title: "智宇 — 用 AI 把想法做成软件与网页",
     description:
-      "用 AI 创造，让想法真正产生价值。宇奇引擎、奇览、Team Orchestrator 等独立软件作品档案。",
+      "做产品出身，用 AI 把想法直接做成可用的软件与网页。",
     images: ["/og-cover.jpg"],
   },
 };
@@ -58,9 +56,27 @@ export default function RootLayout({
   return (
     <html
       lang="zh-CN"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${geistMono.variable} h-full`}
     >
-      <body className="min-h-full flex flex-col bg-[#050507] text-[#f4f4f5]">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){
+              try {
+                var t = localStorage.getItem('zhiyu-theme');
+                var d = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (t === 'dark' || (!t && d)) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch(e) {}
+            })();`,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col bg-[#fbfaf8] dark:bg-[#121211] text-[#171717] dark:text-[#ecebe7]">
         {children}
         {/*
           Hydration 兜底：React 挂载失败（脚本被代理改写/拦截、弱网 chunk 丢失等）
