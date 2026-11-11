@@ -22,7 +22,6 @@ import { useLangFlight } from "@/components/site/LangSwap";
 import { COLS, ITEMS, linksOf, yearOf, textOf, stampText, colLabel, type Item, type Lang } from "./projects";
 import { Controls } from "./Controls";
 import { storyOf, type Story } from "./stories";
-import { ZoomStage, useScrollFxOn } from "./ScrollFx";
 
 const SILK = [0.16, 1, 0.3, 1] as const;
 
@@ -178,7 +177,6 @@ function Body({ item, lang, direction, reduced, fresh, hideTitle, hold, onSelect
   const next = ITEMS[(i + 1) % ITEMS.length];
   const links = linksOf(item.id, lang);
   const st = storyOf(item.id, lang);
-  const zoomOn = useScrollFxOn(reduced) && !flight;
 
   /* 标题滚出屏幕后，顶部出现一条细的标题栏：项目名 + 入口，始终知道在看哪个项目 */
   const [bar, setBar] = useState(false);
@@ -281,7 +279,8 @@ function Body({ item, lang, direction, reduced, fresh, hideTitle, hold, onSelect
       )}
 
       {item.video ? (
-        <ZoomStage on={zoomOn} w={540} h={304} className="mt-8">
+        // 视频保持原尺寸：不再随滚动放大（缩放会把原生播放控件一起放大）
+        <div className="mt-8">
         <motion.div
           initial={flight ? false : reduced ? { opacity: 0 } : { clipPath: "inset(100% 0% 0% 0%)" }}
           animate={reduced ? { opacity: 1 } : hold ? undefined : { clipPath: "inset(0% 0% 0% 0%)", transition: { duration: 0.8, ease: SILK, delay: base + 0.22 } }}
@@ -302,7 +301,7 @@ function Body({ item, lang, direction, reduced, fresh, hideTitle, hold, onSelect
             className="h-full w-full object-cover"
           />
         </motion.div>
-        </ZoomStage>
+        </div>
       ) : item.preview && (
         <motion.div
           initial={flight ? false : reduced ? { opacity: 0 } : { clipPath: "inset(100% 0% 0% 0%)" }}
