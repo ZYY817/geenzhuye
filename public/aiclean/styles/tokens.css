@@ -1,0 +1,162 @@
+/* ============================================================
+   AIClean 官网 · design tokens
+   三套主题与产品端完全一致。先定义"调色盘常量"（--t-*），
+   再映射到语义变量（--bg/--ink/...）。这样做的原因：
+   主题预览圆点、锁色区块（ikb 主题秀 / ink 页脚）需要在
+   当前主题之外引用另一套主题的色值，常量让它们得以复用。
+   ============================================================ */
+@layer tokens {
+
+  :root {
+    /* ---------- fog · 雾白 ---------- */
+    --t-fog-bg:      #ECEEEA;
+    --t-fog-surface: #F6F7F4;
+    --t-fog-ink:     #141A1C;
+    --t-fog-ink2:    #465053;
+    --t-fog-ink3:    #727C7F;
+    --t-fog-hair:    rgba(20,26,28,.13);
+    --t-fog-rule:    rgba(20,26,28,.85);
+    --t-fog-hover:   rgba(20,26,28,.06);
+    --t-fog-acc:     #1638E0;
+    --t-fog-accd:    #0E27A8;
+    --t-fog-onacc:   #FFFFFF;
+    --t-fog-spark:   #CBF73C;
+    --t-fog-danger:  #C2321D;
+    --t-fog-ok:      #16794C;
+    --t-fog-warn:    #B45309;
+    --t-fog-sys:     #D3D8D3;
+    --t-fog-lock:    #9FA7A4;
+
+    /* ---------- ikb · 克莱因蓝 ---------- */
+    --t-ikb-bg:      #0B2FC2;
+    --t-ikb-surface: #0A28A8;
+    --t-ikb-ink:     #F5F7FF;
+    --t-ikb-ink2:    rgba(245,247,255,.8);
+    --t-ikb-ink3:    rgba(245,247,255,.58);
+    --t-ikb-hair:    rgba(245,247,255,.2);
+    --t-ikb-rule:    rgba(245,247,255,.85);
+    --t-ikb-hover:   rgba(245,247,255,.1);
+    --t-ikb-acc:     #D9FF3F;
+    --t-ikb-accd:    #B6DD12;
+    --t-ikb-onacc:   #081A6E;
+    --t-ikb-spark:   #FFFFFF;
+    --t-ikb-danger:  #FFB4A6;
+    --t-ikb-ok:      #D9FF3F;
+    --t-ikb-warn:    #FFD34F;
+    --t-ikb-sys:     rgba(255,255,255,.16);
+    --t-ikb-lock:    rgba(255,255,255,.42);
+
+    /* ---------- ink · 夜墨（默认） ---------- */
+    --t-ink-bg:      #121516;
+    --t-ink-surface: #1A1E1F;
+    --t-ink-ink:     #E8ECEA;
+    --t-ink-ink2:    #A9B2B0;
+    --t-ink-ink3:    #7C8684;
+    --t-ink-hair:    rgba(232,236,234,.13);
+    --t-ink-rule:    rgba(232,236,234,.7);
+    --t-ink-hover:   rgba(232,236,234,.07);
+    --t-ink-acc:     #5B7CFF;
+    --t-ink-accd:    #3F5FE6;
+    --t-ink-onacc:   #FFFFFF;
+    --t-ink-spark:   #CBF73C;
+    --t-ink-danger:  #FF8D7A;
+    --t-ink-ok:      #7FD9A8;
+    --t-ink-warn:    #F0B45A;
+    --t-ink-sys:     #2B3132;
+    --t-ink-lock:    #5C6563;
+
+    /* ---------- 字体 / 尺寸 / 动效 ---------- */
+    --font-display: "Segoe UI Variable Display","Segoe UI","Microsoft YaHei UI",sans-serif;
+    --font-body:    "Segoe UI Variable Text","Segoe UI","Microsoft YaHei UI",sans-serif;
+    --font-mono:    "Cascadia Mono","Consolas",monospace;
+
+    --radius-s: 8px;
+    --radius-m: 12px;
+    --radius-l: 16px;
+
+    --nav-h: 56px;
+    --wrap: 1080px;
+
+    --ease-out: cubic-bezier(.2,.8,.2,1);
+    --ease-spring: cubic-bezier(.2,.9,.3,1.15);
+    --dur: .35s;
+  }
+
+  /* ---------- 主题映射 ---------- */
+  /* 不硬编码在 html 上，而是 data-theme 显式指定，便于 JS 与锁色区块复用同一套选择器 */
+  html[data-theme="fog"] {
+    color-scheme: light;
+    --bg: var(--t-fog-bg);       --surface: var(--t-fog-surface);
+    --ink: var(--t-fog-ink);     --ink2: var(--t-fog-ink2);   --ink3: var(--t-fog-ink3);
+    --hair: var(--t-fog-hair);   --rule: var(--t-fog-rule);   --hover: var(--t-fog-hover);
+    --acc: var(--t-fog-acc);     --acc-d: var(--t-fog-accd);  --onacc: var(--t-fog-onacc);
+    --spark: var(--t-fog-spark); --danger: var(--t-fog-danger);
+    --ok: var(--t-fog-ok);       --warn: var(--t-fog-warn);
+    --sys: var(--t-fog-sys);     --lock: var(--t-fog-lock);
+  }
+
+  html[data-theme="ikb"] {
+    color-scheme: dark;
+    --bg: var(--t-ikb-bg);       --surface: var(--t-ikb-surface);
+    --ink: var(--t-ikb-ink);     --ink2: var(--t-ikb-ink2);   --ink3: var(--t-ikb-ink3);
+    --hair: var(--t-ikb-hair);   --rule: var(--t-ikb-rule);   --hover: var(--t-ikb-hover);
+    --acc: var(--t-ikb-acc);     --acc-d: var(--t-ikb-accd);  --onacc: var(--t-ikb-onacc);
+    --spark: var(--t-ikb-spark); --danger: var(--t-ikb-danger);
+    --ok: var(--t-ikb-ok);       --warn: var(--t-ikb-warn);
+    --sys: var(--t-ikb-sys);     --lock: var(--t-ikb-lock);
+  }
+
+  html[data-theme="ink"],
+  html:not([data-theme]) {           /* 未指定时回退到默认夜墨 */
+    color-scheme: dark;
+    --bg: var(--t-ink-bg);       --surface: var(--t-ink-surface);
+    --ink: var(--t-ink-ink);     --ink2: var(--t-ink-ink2);   --ink3: var(--t-ink-ink3);
+    --hair: var(--t-ink-hair);   --rule: var(--t-ink-rule);   --hover: var(--t-ink-hover);
+    --acc: var(--t-ink-acc);     --acc-d: var(--t-ink-accd);  --onacc: var(--t-ink-onacc);
+    --spark: var(--t-ink-spark); --danger: var(--t-ink-danger);
+    --ok: var(--t-ink-ok);       --warn: var(--t-ink-warn);
+    --sys: var(--t-ink-sys);     --lock: var(--t-ink-lock);
+  }
+
+  /* ---------- 锁色区块 ----------
+     主题展示区固定克莱因蓝、页脚固定夜墨——把常量再映射一次即可，
+     区块内部所有组件自动跟随，不随页面主题变化。 */
+  .theme-ikb {
+    --bg: var(--t-ikb-bg);       --surface: var(--t-ikb-surface);
+    --ink: var(--t-ikb-ink);     --ink2: var(--t-ikb-ink2);   --ink3: var(--t-ikb-ink3);
+    --hair: var(--t-ikb-hair);   --rule: var(--t-ikb-rule);   --hover: var(--t-ikb-hover);
+    --acc: var(--t-ikb-acc);     --acc-d: var(--t-ikb-accd);  --onacc: var(--t-ikb-onacc);
+    --spark: var(--t-ikb-spark); --danger: var(--t-ikb-danger);
+    --ok: var(--t-ikb-ok);       --warn: var(--t-ikb-warn);
+    --sys: var(--t-ikb-sys);     --lock: var(--t-ikb-lock);
+  }
+  .theme-fog {
+    --bg: var(--t-fog-bg);       --surface: var(--t-fog-surface);
+    --ink: var(--t-fog-ink);     --ink2: var(--t-fog-ink2);   --ink3: var(--t-fog-ink3);
+    --hair: var(--t-fog-hair);   --rule: var(--t-fog-rule);   --hover: var(--t-fog-hover);
+    --acc: var(--t-fog-acc);     --acc-d: var(--t-fog-accd);  --onacc: var(--t-fog-onacc);
+    --spark: var(--t-fog-spark); --danger: var(--t-fog-danger);
+    --ok: var(--t-fog-ok);       --warn: var(--t-fog-warn);
+    --sys: var(--t-fog-sys);     --lock: var(--t-fog-lock);
+  }
+  .theme-ink {
+    --bg: var(--t-ink-bg);       --surface: var(--t-ink-surface);
+    --ink: var(--t-ink-ink);     --ink2: var(--t-ink-ink2);   --ink3: var(--t-ink-ink3);
+    --hair: var(--t-ink-hair);   --rule: var(--t-ink-rule);   --hover: var(--t-ink-hover);
+    --acc: var(--t-ink-acc);     --acc-d: var(--t-ink-accd);  --onacc: var(--t-ink-onacc);
+    --spark: var(--t-ink-spark); --danger: var(--t-ink-danger);
+    --ok: var(--t-ink-ok);       --warn: var(--t-ink-warn);
+    --sys: var(--t-ink-sys);     --lock: var(--t-ink-lock);
+  }
+
+  /* ---------- @property 注册 ----------
+     让自定义属性可被 transition/animation 插值：
+     --mx/--my 卡片光标光斑坐标；--hold 按住按钮进度；--beam 扫描光束位置。 */
+  @property --mx   { syntax: "<length-percentage>"; inherits: true; initial-value: 50%; }
+  @property --my   { syntax: "<length-percentage>"; inherits: true; initial-value: 50%; }
+  /* --hold 写在按钮上、被填充层子元素 var() 读取 → 必须可继承 */
+  @property --hold { syntax: "<number>"; inherits: true; initial-value: 0; }
+  /* 格子 transform 链里需要平滑过渡的因子：--fc 类聚焦放大、--fs 闪缩 */
+  @property --fc   { syntax: "<number>"; inherits: true; initial-value: 1; }
+  @property --fs   { syntax: "<number>"; inherits: true; initial-value: 1; }
+}

@@ -1,0 +1,128 @@
+/* ============================================================
+   base · 层顺序声明 + reset + 元素排版
+   ============================================================ */
+
+/* 层顺序在此一次性声明（reset 规则少，并入本文件开头） */
+@layer reset, tokens, base, layout, components, effects;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+  * { margin: 0; }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--nav-h) + 28px); /* 锚点跳转避开浮动导航 */
+  }
+
+  body {
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  img, picture, svg, video { display: block; max-width: 100%; }
+  img { height: auto; }
+
+  input, button, textarea, select { font: inherit; color: inherit; }
+  button { cursor: pointer; background: none; border: 0; padding: 0; }
+
+  ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
+
+  a { color: inherit; }
+}
+
+@layer base {
+  body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink);
+    background: var(--bg);
+    font-optical-sizing: auto; /* Segoe Variable 的光学校正：大字自动收紧 */
+    transition: background-color .35s ease, color .35s ease; /* 主题切换柔化（无 view-transition 时兜底） */
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 650;
+    line-height: 1.12;
+    letter-spacing: -0.02em;   /* 中文负字距取保守值 */
+    text-wrap: balance;
+  }
+
+  p { text-wrap: pretty; }
+
+  /* ---------- 全页质感层 ----------
+     ① 胶片颗粒：极淡的 feTurbulence 灰噪铺满全页，平面色立刻有"纸感"。
+     ② 暗角：视口四边轻微压暗，视线自然收向中央。两层均不挡交互。 */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: .032;
+  }
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 299;
+    pointer-events: none;
+    background: radial-gradient(125% 92% at 50% 42%, transparent 58%, rgba(0, 0, 0, .13));
+  }
+  html[data-theme="fog"] body::after {
+    background: radial-gradient(125% 92% at 50% 42%, transparent 62%, rgba(0, 0, 0, .06));
+  }
+
+  a {
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+
+  code, kbd, samp, pre {
+    font-family: var(--font-mono);
+    font-size: .92em;
+  }
+
+  ::selection {
+    background: var(--acc);
+    color: var(--onacc);
+  }
+
+  /* 全局统一的键盘可见焦点；鼠标点击不出现 */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid var(--acc);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* 滚动条跟着主题走，窄、克制 */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb {
+    background: var(--lock);
+    border: 3px solid var(--bg);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 屏幕阅读器专用 */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

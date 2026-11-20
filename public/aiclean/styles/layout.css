@@ -1,0 +1,103 @@
+/* ============================================================
+   layout · 中轴构图骨架
+   原则：所有区块以屏幕中轴为准。背景和图形铺满整个视口，
+   文字集中在中轴一条窄栏。不用左右分栏，不用卡片栅格。
+   ============================================================ */
+@layer layout {
+
+  /* ---------- 钉子舞台 ----------
+     只有两处钉住：演示区（demo）和主题区（faces）。
+     data-scrub="pin" 的 section 比视口高，里面的 __stage
+     sticky 一屏，滚动进度 --p 由 scroll.js 提供 */
+  .demo__stage,
+  .faces__stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .demo  { height: 264vh; }  /* 滚动距离 1.64 屏，≤3 屏 */
+  .faces { height: 206vh; }  /* 滚动距离 1.06 屏，≤2 屏 */
+
+  /* 减动效：演示区解钉，直接显示静态对比图（由 components.css 控制显隐） */
+  @media (prefers-reduced-motion: reduce) {
+    .demo { height: auto; }
+    .demo__stage { position: relative; height: auto; overflow: visible; }
+  }
+
+  /* ---------- 铺满视口的格子底 ---------- */
+  .cells {
+    display: grid;
+    grid-template-columns: repeat(18, 1fr);
+    grid-template-rows: repeat(11, 1fr);
+    gap: clamp(3px, .55vw, 9px);
+  }
+  /* 竖屏转 11×18 */
+  @media (max-aspect-ratio: 1/1) {
+    .cells {
+      grid-template-columns: repeat(11, 1fr);
+      grid-template-rows: repeat(18, 1fr);
+    }
+  }
+
+  .gmap {
+    position: absolute;
+    inset: 0;
+  }
+
+  .cell {
+    border-radius: clamp(2px, .3vw, 6px);
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* 主题屏三层脸叠在同一格 */
+  .faces__stage { display: grid; place-items: center; }
+  .face {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ---------- 下载屏 ---------- */
+  .dl {
+    position: relative;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .dl__grid {
+    position: absolute;
+    inset: 0;
+    padding: clamp(8px, 1.4vmin, 20px);
+    z-index: 0;
+  }
+  .dl__in {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: min(92vw, 44em);
+  }
+
+  /* ---------- 窄屏降级：解钉，纵向排 ---------- */
+  @media (max-width: 900px) {
+    .faces { height: auto; }
+    .faces__stage {
+      position: relative;
+      height: auto;
+      overflow: visible;
+      display: block;
+    }
+    .face {
+      height: auto;
+      min-height: 80vh;
+      display: grid;
+      place-items: center;
+      padding: 4vh 0;
+    }
+  }
+}

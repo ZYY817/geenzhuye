@@ -190,6 +190,47 @@ const S: Record<string, { zh: Story; en: Story }> = {
     },
   },
 
+  aiclean: {
+    zh: {
+      bg: "C 盘用着用着就满了，清完过段时间又满。系统自带的清理只扫固定几处，清不出多少；各家 AI 应用的对话记录、模型文件越攒越大，又藏在各自目录里，用户根本不知道它们占了几十 GB。",
+      pos: "AIClean 先把整盘占用画成 **198 个格子**，每个格子是谁占的、占多少都有标注，看清了再决定动哪块。",
+      caps: [
+        "占用按类分：可清理的缓存、需要你看一眼的、程序正在用的、建议迁走的",
+        "清理要按住才生效，不会误点一下就删",
+        "AI 对话记录和模型文件原路径搬到其他盘，原位留下链接，软件照常运行",
+        "迁移失败自动回滚，操作留日志，随时可以还原",
+      ],
+      build: {
+        lead: "用 AI 开发。动 C 盘的工具最怕删错，所以把「先看清楚」做在最前面。",
+        items: [
+          ["单文件交付", "Go 加 WebView2，编译成一个 **6.1 MB** 的 exe，免安装，不联网"],
+          ["规则驱动", "什么能清、什么要确认，写在规则文件里，加一条规则就多认一类数据"],
+          ["格子可视化", "整盘占用画成 198 格，每格约 1 GB，悬停能看到里面装的是什么"],
+        ],
+      },
+      out: "已发布 v1.0.0，官网和安装包都在 GitHub 上。",
+    },
+    en: {
+      bg: "The C: drive fills up again and again, and a cleanup only buys a little time. Windows’ built-in cleanup scans a few fixed spots, while AI apps quietly pile up tens of gigabytes of conversations and model files in their own folders, where nobody sees them.",
+      pos: "AIClean first draws the whole drive as **198 cells** — each labeled with what owns it and how large it is — so you see the picture before touching anything.",
+      caps: [
+        "Usage is sorted into kinds: safe-to-clean caches, items to review, files in use, and data better moved away",
+        "Cleaning needs a press-and-hold, so a stray click deletes nothing",
+        "AI conversations and model files move to another drive in place, leaving a link behind so the apps keep working",
+        "A failed migration rolls back by itself, and every action is logged for undo",
+      ],
+      build: {
+        lead: "Built with AI. A tool that touches the C: drive must not delete the wrong thing, so seeing clearly comes first.",
+        items: [
+          ["Single-file build", "Go plus WebView2 compiles into one **6.1 MB** exe — portable and offline"],
+          ["Rule-driven", "What is safe to clean and what needs a look lives in a rules file; adding a rule teaches it one more kind of data"],
+          ["Cell map", "The drive is drawn as 198 cells of about 1 GB each, and hovering one shows what is inside"],
+        ],
+      },
+      out: "v1.0.0 released, with the site and installer on GitHub.",
+    },
+  },
+
   "yuqi-team-orchestrator": {
     zh: {
       bg: "把一个大任务交给单个 AI，它容易做着做着跑偏，或者卡在半路；它说「做完了」，实际也不一定完成。",

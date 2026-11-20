@@ -69,6 +69,16 @@ export const COLS: { label: string; labelEn: string; items: Item[] }[] = [
           meta: ["Windows 10 / 11", "C# / WPF", "NVIDIA · AMD · Intel"],
         },
       },
+      {
+        id: "aiclean", name: "AIClean", line: "把 C 盘占用画成格子，缓存按住清、AI 数据搬到其他盘",
+        preview: "/projects/aiclean.webp", peek: "/projects/aiclean-peek.webp",
+        demo: { src: "/aiclean/index.html", poster: "/projects/aiclean-demo.webp", w: 1280, h: 800 },
+        meta: ["Windows 10 / 11", "Go + WebView2", "单文件 exe · 6.1 MB"],
+        en: {
+          name: "AIClean", line: "C: drive usage as a cell map — hold to clean caches, move AI app data off C:",
+          meta: ["Windows 10 / 11", "Go + WebView2", "Single exe · 6.1 MB"],
+        },
+      },
     ],
   },
   {

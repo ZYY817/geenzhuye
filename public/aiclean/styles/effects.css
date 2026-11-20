@@ -1,0 +1,82 @@
+/* ============================================================
+   effects · 动画层
+   全部包在 prefers-reduced-motion: no-preference 里；
+   减动效模式直接给终态，不留隐藏元素。
+   ============================================================ */
+@layer effects {
+
+@media (prefers-reduced-motion: no-preference) {
+
+  /* ---------- 格子波浪入场 ----------
+     终态亮度不写死，吃各处的 --o；transform 是四条变量链的乘积：
+     --k 透镜邻近 · --fc 类聚焦放大 · --fs 闪缩 · --fx/--fy 飞格位移。
+     动画 fill:both 会冻结最后一帧，变量在帧里动态解析，所以都写进关键帧。 */
+  .cells .cell { opacity: 0; }
+  .cells.run .cell { animation: cin .5s var(--ease-out) both; animation-delay: var(--d, 0ms); }
+  @keyframes cin {
+    from { opacity: 0; transform: scale(.3); }
+    to   { opacity: var(--o, 1);
+           transform: translate(var(--fx, 0px), var(--fy, 0px))
+                      scale(calc((1 + var(--k, 0) * .28) * var(--fs, 1) * var(--fc, 1))); }
+  }
+
+  /* ---------- 透镜：指针邻近的格子放大 ---------- */
+  .cell { transition: transform .25s var(--ease-out), opacity .35s ease,
+              background-color .35s ease, box-shadow .35s ease,
+              --fc .15s var(--ease-out), --fs .18s ease; }
+  .gmap .cell {
+    transform: translate(var(--fx, 0px), var(--fy, 0px))
+               scale(calc((1 + var(--k, 0) * .28) * var(--fs, 1) * var(--fc, 1)));
+  }
+
+  /* ---------- hero 入场：标题显影，截图上台 ---------- */
+  .h1 { opacity: 0; animation: heroIn .9s var(--ease-out) .15s forwards; }
+  @keyframes heroIn {
+    from { opacity: 0; filter: blur(14px); translate: 0 4%; }
+    to   { opacity: 1; filter: blur(0); translate: 0 0; }
+  }
+  .hero__eyebrow, .hero__d, .hero__ctas, .hero__meta {
+    opacity: 0;
+    animation: fadeup .7s var(--ease-out) forwards;
+  }
+  .hero__eyebrow { animation-delay: .05s; }
+  .hero__d       { animation-delay: .3s; }
+  .hero__ctas    { animation-delay: .42s; }
+  .hero__meta    { animation-delay: .52s; }
+  @keyframes fadeup {
+    from { opacity: 0; translate: 0 14px; }
+    to   { opacity: 1; translate: 0 0; }
+  }
+
+  /* ---------- 字带跟随滚动 ---------- */
+  .band__row { transition: transform .05s linear; }
+
+  /* ---------- 主题擦色 ---------- */
+  .face { transition: clip-path .1s linear; }
+
+  /* ---------- reveal：进入视口淡上 ---------- */
+  [data-rv] {
+    opacity: 0;
+    translate: 0 30px;
+    transition: opacity .6s var(--ease-out), translate .6s var(--ease-out);
+  }
+  [data-rv].is-in { opacity: 1; translate: 0 0; }
+
+  /* ---------- 扫描格呼吸 ---------- */
+  .cell--scan { animation: breathe 1.4s ease-in-out infinite alternate; }
+  @keyframes breathe { from { opacity: .25; } to { opacity: .8; } }
+
+} /* end no-preference */
+
+/* ---------- 减动效：全部给终态 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .cells .cell { opacity: var(--o, 1); animation: none; }
+  .hero__eyebrow, .hero__d, .hero__ctas, .hero__meta { opacity: 1; }
+  [data-rv] { opacity: 1; }
+  .h1 { opacity: 1; }
+  .disk__beam { display: none; }
+  .face { transition: none; }
+  .safe__item { opacity: 1; translate: none; transition: none; }
+  .hero__shot { transform: none; }
+}
+}

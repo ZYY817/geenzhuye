@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- 2×2 格阵：左上墨块 / 右上蓝块 / 左下描边空心 / 右下墨块，格间留缝 -->
+  <rect x="5"  y="5"  width="25" height="25" rx="5" fill="#1A1E1F"/>
+  <rect x="34" y="5"  width="25" height="25" rx="5" fill="#4F5DF5"/>
+  <rect x="5"  y="34" width="25" height="25" rx="5" fill="none" stroke="#1A1E1F" stroke-width="4"/>
+  <rect x="34" y="34" width="25" height="25" rx="5" fill="#1A1E1F"/>
+</svg>
