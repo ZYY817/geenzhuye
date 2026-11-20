@@ -70,12 +70,12 @@ export const COLS: { label: string; labelEn: string; items: Item[] }[] = [
         },
       },
       {
-        id: "aiclean", name: "AIClean", line: "把 C 盘占用画成格子，缓存按住清、AI 数据搬到其他盘",
+        id: "aiclean", name: "AIClean", line: "面向 AI 应用的 C 盘清理软件，对话和模型能迁去其他盘",
         preview: "/projects/aiclean.webp", peek: "/projects/aiclean-peek.webp",
         demo: { src: "/aiclean/index.html", poster: "/projects/aiclean-demo.webp", w: 1280, h: 800 },
         meta: ["Windows 10 / 11", "Go + WebView2", "单文件 exe · 6.1 MB"],
         en: {
-          name: "AIClean", line: "C: drive usage as a cell map — hold to clean caches, move AI app data off C:",
+          name: "AIClean", line: "A C: drive cleaner for AI apps — moves conversations and models off C:",
           meta: ["Windows 10 / 11", "Go + WebView2", "Single exe · 6.1 MB"],
         },
       },

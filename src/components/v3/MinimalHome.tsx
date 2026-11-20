@@ -258,7 +258,6 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
         className={wide ? `v3-home look-${look} relative mx-auto w-full max-w-[1120px] px-[22px] pb-16 pt-12 min-[640px]:pt-[72px] min-[1180px]:px-0` : "v3-home mx-auto w-full max-w-[760px] px-[22px] pb-[120px] pt-16 min-[640px]:pt-[112px] min-[800px]:px-0"}>
         <header>
           <div className="v3-in flex items-center text-[15px] font-medium text-[var(--ink)]" style={enter(0)}>
-            {look === "a" && <span aria-hidden className="mr-2.5 inline-block h-2 w-2 bg-[var(--accent)]" />}
             {t.name}
             {look === "a" && <span className="ml-4 text-[12px] font-normal tracking-[0.08em] text-[var(--ink4)]">{lang === "en" ? "SHENZHEN · 2026" : "深圳 · 2026"}</span>}
             <Controls className="ml-auto" lang={lang} onLang={switchLang} />
@@ -269,9 +268,9 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
         <section className={wide ? "mt-10 max-w-[860px]" : "mt-14"}>
           <p className={`v3-in leading-[1.75] text-[var(--ink)] [text-wrap:pretty] ${wide ? "text-[19px] min-[640px]:text-[23px]" : "text-[17px] leading-[1.85] min-[640px]:text-[19px]"}`} style={enter(1)}>
             {lang === "en" ? (
-              <>I’m Zhiyu. I turn ideas into working apps with AI, solving specific problems for people.<br className="hidden min-[800px]:block" /> Each problem looks small, but small things done often add up to something big.</>
+              <>I’m Zhiyu. I build software with AI to help more people solve real problems.</>
             ) : (
-              <>我是智宇，擅长用 AI 把想法落地成应用，帮人解决一些具体的问题。<br className="hidden min-[800px]:block" />每个问题看起来都不大，但小事做多了，也就成了大事。</>
+              <>我是智宇，用 AI 做软件，帮更多人解决实际问题。</>
             )}
           </p>
           <p className="v3-in mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-1 text-[14px] text-[var(--ink3)]" style={enter(2)}>

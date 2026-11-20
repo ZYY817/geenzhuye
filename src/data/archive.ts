@@ -106,7 +106,7 @@ export const ARCHIVE_PROJECTS: ProjectItem[] = [
     category: "SYSTEM",
     categoryLabel: "C 盘清理 / AI 应用数据迁移",
     status: "OPEN SOURCE",
-    tagline: "面向 AI 应用的 C 盘清理工具，把整盘占用画成格子看清再动手。",
+    tagline: "面向 AI 应用的 C 盘清理软件，整盘占用画成格子看清再动手。",
     description: "扫描 C 盘占用并画成 198 个格子，每个格子是谁占的、占多少都有标注。缓存按住清理，待确认的逐条看一眼，程序正在用的先记下来。各家 AI 应用的对话记录、模型文件原路径迁往其他盘，原位保留链接，软件照常运行；迁移失败自动回滚。",
     tags: ["Go", "WebView2", "Windows", "单文件 exe"],
     specs: [
