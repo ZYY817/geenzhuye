@@ -355,6 +355,7 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
           --bg: #fbfaf8; --ink: #141414; --ink2: #36352f; --ink3: #6f6d67; --ink4: #8d8b86; --ink5: #b5b3ae; --ink6: #c9c7c1;
           --plate: #eceae6; --line: rgba(23,23,23,.2); --line2: rgba(23,23,23,.1); --tint: rgba(23,23,23,.04); --img: none;
           background: var(--bg); color: var(--ink2); -webkit-font-smoothing: antialiased;
+          transition: background-color 320ms ease, color 320ms ease;
         }
         /* 深色：同一张纸的夜晚版——暖黑底、米白墨，没有发光和饱和色（SPEC §11.2） */
         .dark .v3 {
@@ -362,6 +363,58 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
           --plate: #1d1c1a; --line: rgba(236,235,231,.22); --line2: rgba(236,235,231,.12); --tint: rgba(236,235,231,.05); --img: brightness(.85);
           color-scheme: dark;
         }
+
+        /* 配色方案（2026-11-20 用户定制）：右上角圆点切换，存 localStorage 的 zhiyu-pal，
+           首屏脚本在 hydration 前就把 data-pal 写到 <html> 上，不会闪回原色。--num 是分组序号的专用色 */
+        html[data-pal="amber"] .v3 {
+          --bg: #faf7f0; --ink: #1c2438; --ink2: #2e3a52; --ink3: #687389; --ink4: #8a92a8; --ink5: #b3b9c9; --ink6: #ccd1dd;
+          --plate: #f0ebe1; --line: rgba(28,36,56,.2); --line2: rgba(28,36,56,.1); --tint: rgba(180,83,9,.06);
+          --accent: #b45309; --num: #b45309;
+        }
+        html.dark[data-pal="amber"] .v3 {
+          --bg: #141a29; --ink: #e8e4dc; --ink2: #b7bcc9; --ink3: #8a92a8; --ink4: #6f7791; --ink5: #565d78; --ink6: #3f465e;
+          --plate: #1c2334; --line: rgba(232,228,220,.2); --line2: rgba(232,228,220,.1); --tint: rgba(217,119,6,.1);
+          --accent: #e09a3c; --num: #e09a3c;
+        }
+        html[data-pal="tech"] .v3 {
+          --bg: #ffffff; --ink: #0b1220; --ink2: #1f2d44; --ink3: #54637d; --ink4: #7d8aa3; --ink5: #aab4c8; --ink6: #c9d2e2;
+          --plate: #eef1f6; --line: rgba(15,35,80,.18); --line2: rgba(15,35,80,.09); --tint: rgba(37,99,235,.05);
+          --accent: #2563eb; --num: #2563eb;
+        }
+        html.dark[data-pal="tech"] .v3 {
+          --bg: #0a1222; --ink: #eaf0fb; --ink2: #a8b6d4; --ink3: #7787ad; --ink4: #5d6d94; --ink5: #46547a; --ink6: #34405f;
+          --plate: #101a30; --line: rgba(190,205,240,.2); --line2: rgba(190,205,240,.1); --tint: rgba(59,130,246,.12);
+          --accent: #60a5fa; --num: #60a5fa;
+        }
+        html[data-pal="sky"] .v3 {
+          --bg: #fcfeff; --ink: #101d29; --ink2: #233647; --ink3: #56707f; --ink4: #7e97a6; --ink5: #aec2cd; --ink6: #cbdbe2;
+          --plate: #eef6fa; --line: rgba(14,90,140,.18); --line2: rgba(14,90,140,.09); --tint: rgba(14,165,233,.06);
+          --accent: #0ea5e9; --num: #fb7185;
+        }
+        html.dark[data-pal="sky"] .v3 {
+          --bg: #071420; --ink: #e4f2fb; --ink2: #a4c4d6; --ink3: #7193a8; --ink4: #5a7b90; --ink5: #456073; --ink6: #324a5c;
+          --plate: #0d2030; --line: rgba(190,225,245,.2); --line2: rgba(190,225,245,.1); --tint: rgba(14,165,233,.12);
+          --accent: #38bdf8; --num: #fb8ba0;
+        }
+        html[data-pal="night"] .v3 {
+          --bg: #f2f5fb; --ink: #101a30; --ink2: #26345a; --ink3: #5a6a94; --ink4: #7e8db4; --ink5: #abb6d6; --ink6: #ccd4e8;
+          --plate: #e6ecf7; --line: rgba(20,40,90,.18); --line2: rgba(20,40,90,.09); --tint: rgba(37,99,235,.05);
+          --accent: #c2410c; --num: #c2410c;
+        }
+        html.dark[data-pal="night"] .v3 {
+          --bg: #0a0f22; --ink: #e8edff; --ink2: #a9b4dc; --ink3: #7683b3; --ink4: #5e6b96; --ink5: #47527c; --ink6: #333d63;
+          --plate: #121830; --line: rgba(200,214,255,.2); --line2: rgba(200,214,255,.1); --tint: rgba(59,130,246,.12);
+          --accent: #fb923c; --num: #fb923c;
+        }
+        /* 各配色下 html/body 的底色跟随（防滚动溢出露白边） */
+        html[data-pal="amber"], html[data-pal="amber"] body { background: #faf7f0; }
+        html.dark[data-pal="amber"], html.dark[data-pal="amber"] body { background: #141a29; }
+        html[data-pal="tech"], html[data-pal="tech"] body { background: #ffffff; }
+        html.dark[data-pal="tech"], html.dark[data-pal="tech"] body { background: #0a1222; }
+        html[data-pal="sky"], html[data-pal="sky"] body { background: #fcfeff; }
+        html.dark[data-pal="sky"], html.dark[data-pal="sky"] body { background: #071420; }
+        html[data-pal="night"], html[data-pal="night"] body { background: #f2f5fb; }
+        html.dark[data-pal="night"], html.dark[data-pal="night"] body { background: #0a0f22; }
         .v3 img { filter: var(--img); }
         .v3 ::selection { background: var(--ink); color: var(--bg); }
         .v3-serif { font-family: var(--font-instrument), "Instrument Serif", serif; font-style: italic; letter-spacing: .005em; }
@@ -404,7 +457,7 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
         .dark .v3 { --accent: #d4664c; }
         .look-a .look-col { border-top: 1px solid var(--line); padding-top: 18px; }
         .look-a .look-head { display: flex; align-items: baseline; gap: 10px; }
-        .look-a .look-num { font-size: 26px; line-height: 1; color: var(--ink); }
+        .look-a .look-num { font-size: 26px; line-height: 1; color: var(--num, var(--ink)); transition: color 300ms; }
         /* 2×2 四角排布：宽屏时项目名和一句话排在同一行，过长省略 */
         @media (min-width: 1100px) {
           .look-row { display: flex; align-items: baseline; gap: 14px; }

@@ -7,6 +7,7 @@ const instrument = Instrument_Serif({ weight: "400", style: "italic", subsets: [
 const BOOT = `(function(){var d=document.documentElement,q=location.search;
 if(/[?&]p=/.test(q))d.classList.add('v3-deep');
 try{var m=q.match(/[?&]lang=(en|zh)/);if(m)localStorage.setItem('zhiyu-lang',m[1]);
+var pl=localStorage.getItem('zhiyu-pal');if(pl)d.dataset.pal=pl;
 if(localStorage.getItem('zhiyu-lang')==='en'){d.dataset.wantLang='en';d.classList.add('v3-wait');setTimeout(function(){d.classList.remove('v3-wait')},2500);}}catch(e){}})();`;
 
 export default function Home() {
