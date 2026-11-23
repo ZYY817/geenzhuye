@@ -5,13 +5,14 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useLang } from "@/components/site/lang";
 
 /* ============================================================================
- * LangSwap —— 语言切换「视差盖页」(parallax cover push)
+ * LangSwap —— 语言切换「侧漂移接力」(sequential side-drift swap)
  * ----------------------------------------------------------------------------
- * 交互模型 = iOS 导航推屏而非主屏等速拖页：新页全速从屏缘推入**盖过**旧页，
- * 旧页只退 30% 屏宽并渐暗——让位感 + 纵深，比两层锁步更有冲击力。
- * 每个语种锚定自己的一侧：英文=右页（从右进）、中文=左页（从左进）；
- * initial/exit 同号（退出层属性按其自身 lang 冻结），来回切换方向始终一致。
- * 新页前缘带一条软阴影掠过旧页，是"盖上去"的关键深度线索。
+ * 交互模型 = 串行接力而非盖页推屏：旧页先向自己一侧漂移淡出，新页再从
+ * 自己一侧漂移淡入（mode="wait" 保证两层从不共存）。
+ * 每个语种锚定自己的一侧：英文=右侧、中文=左侧；initial/exit 同号
+ * （退出层属性按其自身 lang 冻结），来回切换方向始终一致。
+ * 曾用满屏不透明推屏板防重影——但静止时它盖住背景装饰层、底缘形成横线，
+ * 且推屏瞬间整页背景被"冲掉"。串行后无共存期，板子和底色一并删掉。
  *
  * 流畅度：切换瞬间通过 LangFlightContext 告知新页子树"这是换语言重挂载"，
  * 内部入场动画（hero/列表/详情 stagger/里程表）全部直接渲染成品态——
@@ -25,9 +26,8 @@ const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffec
 const SLIDE_MS = 550;
 /* iOS 分页曲线：起步果断、长距离平滑减速、干净落定 */
 const EASE_PAGE: [number, number, number, number] = [0.32, 0.72, 0, 1];
-/* 旧页退位深度：屏宽占比 + 压暗目标 */
-const RETREAT_VW = 30;
-const RETREAT_OPACITY = 0.5;
+/* 旧页退位/新页入场：向各自锚定侧的漂移距离（px，轻量不晃眼） */
+const DRIFT_PX = 52;
 
 /* 换语言重挂载标记：为 true 时内部组件跳过入场动画、直接渲染成品态 */
 const LangFlightContext = createContext(false);
@@ -81,33 +81,24 @@ export function LangSwap({ children, animate = true }: { children: React.ReactNo
   return (
     <div ref={wrapRef} className="overflow-x-clip">
       <LangFlightContext.Provider value={flight}>
-        <AnimatePresence mode="popLayout" initial={false}>
+        <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={lang}
-            initial={instant ? false : reduced ? { opacity: 0 } : { x: `${dir * 100}vw` }}
+            initial={instant ? false : reduced ? { opacity: 0 } : { opacity: 0, x: dir * DRIFT_PX }}
             animate={
               reduced
                 ? { opacity: 1, transition: { duration: instant ? 0 : 0.15 } }
-                : { x: 0, transition: { duration: SLIDE_MS / 1000, ease: EASE_PAGE } }
+                : { opacity: 1, x: 0, transition: { duration: 0.36, ease: EASE_PAGE } }
             }
             exit={
               reduced
                 ? { opacity: 0, transition: { duration: instant ? 0 : 0.15 } }
-                : {
-                    x: `${dir * RETREAT_VW}vw`,
-                    /* 压暗到 0.5 后尾段收到 0：否则旧页比新页高时，
-                       新页底缘之下会露出一条残边 */
-                    opacity: [1, RETREAT_OPACITY, 0],
-                    transition: {
-                      duration: SLIDE_MS / 1000,
-                      ease: EASE_PAGE,
-                      opacity: { duration: SLIDE_MS / 1000, times: [0, 0.72, 1] },
-                    },
-                  }
+                : { opacity: 0, x: dir * DRIFT_PX, transition: { duration: 0.22, ease: EASE_PAGE } }
             }
-            /* 必须不透明底色：否则滑动中下层旧页从新页文字缝隙透出 = 整页重影；
-               必须视口满宽：窄容器里的滑动层会让新旧两列并排可见（同样是重影） */
-            className="relative w-screen max-w-none bg-[var(--bg,#fff)] will-change-transform mx-[calc(50%-50vw)]"
+            /* 不设底色：串行接力两层从不共存，无需不透明防重影；全透明让 .v3 根的
+               渐变和装饰层在切换全程保持可见——旧推屏板会把背景"冲掉"。
+               必须视口满宽：旧页退出时仍是流内占位，满宽保持居中列不塌。 */
+            className="relative w-screen max-w-none will-change-transform mx-[calc(50%-50vw)]"
           >
             {children}
           </motion.div>

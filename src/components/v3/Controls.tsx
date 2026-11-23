@@ -31,13 +31,15 @@ const subscribePal = (fn: () => void) => {
 const usePal = () =>
   useSyncExternalStore(subscribePal, () => document.documentElement.dataset.pal || "paper", () => "paper");
 
-/* 配色方案：dot 是标志色渐变（上半主色 / 下半纸色或辅色）；bg 用于同步地址栏 meta theme-color */
+/* 配色方案：dot 是标志色渐变（主色 / 点缀色）；bg 用于同步地址栏 meta theme-color。
+   点上即是饱和彩色整页，☾ 换同色系更深的版本（paper 例外：浅色=暖纸、深色=暖黑） */
 const PALS = [
   { id: "paper", zh: "原色暖纸", en: "Paper", dot: "linear-gradient(135deg,#c2452d 50%,#fbfaf8 50%)", bg: { light: "#fbfaf8", dark: "#121211" } },
-  { id: "amber", zh: "墨蓝琥珀", en: "Amber ink", dot: "linear-gradient(135deg,#b45309 50%,#faf7f0 50%)", bg: { light: "#faf7f0", dark: "#141a29" } },
-  { id: "tech", zh: "科技蓝", en: "Tech blue", dot: "linear-gradient(135deg,#2563eb 50%,#ffffff 50%)", bg: { light: "#ffffff", dark: "#0a1222" } },
-  { id: "sky", zh: "天蓝珊瑚", en: "Sky coral", dot: "linear-gradient(135deg,#0ea5e9 55%,#fb7185 45%)", bg: { light: "#fcfeff", dark: "#071420" } },
-  { id: "night", zh: "午夜电蓝", en: "Midnight", dot: "linear-gradient(135deg,#fb923c 50%,#0a0f22 50%)", bg: { light: "#f2f5fb", dark: "#0a0f22" } },
+  { id: "sky", zh: "天蓝 + 热粉", en: "Sky + hot pink", dot: "linear-gradient(135deg,#0593c6 50%,#d83995 50%)", bg: { light: "#04739e", dark: "#022a3d" } },
+  { id: "deep", zh: "深蓝 + 泡泡粉", en: "Deep blue + pink", dot: "linear-gradient(135deg,#09316d 50%,#fd91cc 50%)", bg: { light: "#072553", dark: "#04122e" } },
+  { id: "ocean", zh: "科技蓝 + 青柠", en: "Tech blue + lime", dot: "linear-gradient(135deg,#2476da 50%,#daeb20 50%)", bg: { light: "#123e8a", dark: "#07163a" } },
+  { id: "sunset", zh: "天蓝 + 琥珀", en: "Sky + amber", dot: "linear-gradient(135deg,#0099ff 50%,#ffc531 50%)", bg: { light: "#0079d6", dark: "#034a85" } },
+  { id: "flux", zh: "午夜 + 电蓝橙", en: "Midnight + flux", dot: "linear-gradient(135deg,#fc734d 50%,#02070a 50%)", bg: { light: "#02070a", dark: "#000000" } },
 ] as const;
 
 function setDark(next: boolean) {

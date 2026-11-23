@@ -7,16 +7,20 @@
   <meta name="description" content="AIClean 扫描整盘占用，把 C 盘画成 198 个格子：缓存按住清理，各家 AI 应用的对话记录、模型文件原路径迁往其他盘。免费，开源，不联网。Windows 10/11 64 位，单文件 4.6 MB。">
   <meta name="theme-color" content="#121516">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <!-- 主题引导：在 CSS 生效前从 localStorage / URL 参数恢复主题，避免闪烁 -->
+  <!-- 主题+语言引导：在 CSS 生效前从 localStorage / URL 参数恢复，避免闪烁 -->
   <script>
     (function () {
       try {
-        var q = new URLSearchParams(location.search).get('theme');
-        var t = q || localStorage.getItem('aiclean-site-theme');
+        var q = new URLSearchParams(location.search);
+        var t = q.get('theme') || localStorage.getItem('aiclean-site-theme');
         if (t === 'fog' || t === 'ikb' || t === 'ink') {
           document.documentElement.dataset.theme = t;
         }
-      } catch (e) { /* localStorage 不可用时用默认 ink */ }
+        var l = q.get('lang') || localStorage.getItem('aiclean-site-lang');
+        if (l === 'en') {
+          document.documentElement.lang = 'en';
+        }
+      } catch (e) { /* localStorage 不可用时用默认值 */ }
     })();
   </script>
   <link rel="stylesheet" href="styles/tokens.css">
@@ -42,18 +46,22 @@
         AIClean
       </a>
       <nav class="nav__links" aria-label="页面导航">
-        <a href="#features">功能</a>
-        <a href="#themes">配色</a>
-        <a href="#safety">安全</a>
-        <a href="#download">下载</a>
+        <a href="#features"><span class="zh">功能</span><span class="en">Features</span></a>
+        <a href="#themes"><span class="zh">配色</span><span class="en">Themes</span></a>
+        <a href="#safety"><span class="zh">安全</span><span class="en">Safety</span></a>
+        <a href="#download"><span class="zh">下载</span><span class="en">Download</span></a>
       </nav>
       <div class="nav__right">
+        <div class="ldots" role="group" aria-label="切换语言 / Switch language">
+          <button class="ldot" data-lang-set="zh" aria-pressed="true">中</button>
+          <button class="ldot" data-lang-set="en" aria-pressed="false">EN</button>
+        </div>
         <div class="tdots" role="group" aria-label="切换页面主题">
           <button class="tdot tdot--fog" data-theme-set="fog" aria-pressed="false" aria-label="雾白主题"></button>
           <button class="tdot tdot--ikb" data-theme-set="ikb" aria-pressed="false" aria-label="克莱因蓝主题"></button>
           <button class="tdot tdot--ink" data-theme-set="ink" aria-pressed="false" aria-label="夜墨主题"></button>
         </div>
-        <a class="btn btn--solid nav__cta" href="https://github.com/ZYY817/aiclean/releases/latest">免费下载</a>
+        <a class="btn btn--solid nav__cta" href="https://github.com/ZYY817/aiclean/releases/latest"><span class="zh">免费下载</span><span class="en">Free download</span></a>
       </div>
     </div>
   </header>
@@ -65,14 +73,14 @@
     <section class="hero" id="top" aria-labelledby="hero-t">
       <div class="gridbg" id="gridbg" aria-hidden="true"></div>
       <div class="hero__in">
-        <p class="hero__eyebrow mono">AIClean · Windows C 盘清理工具</p>
-        <h1 class="h1" id="hero-t">面向 AI 应用的 C 盘清理工具。</h1>
-        <p class="hero__d">扫描整盘占用，画成 198 个格子。缓存按住清理；各家 AI 应用的对话记录、模型文件，原路径迁往其他盘。</p>
+        <p class="hero__eyebrow mono"><span class="zh">AIClean · Windows C 盘清理工具</span><span class="en">AIClean · Windows C: drive cleaner</span></p>
+        <h1 class="h1" id="hero-t"><span class="zh">面向 AI 应用的 C 盘清理工具。</span><span class="en">A C: drive cleaner built for AI apps.</span></h1>
+        <p class="hero__d"><span class="zh">扫描整盘占用，画成 198 个格子。缓存按住清理；各家 AI 应用的对话记录、模型文件，原路径迁往其他盘。</span><span class="en">Scans the whole drive and draws it as 198 cells. Hold to clean caches; AI chat history and model files migrate to another drive without changing their paths.</span></p>
         <div class="hero__ctas">
-          <a class="btn btn--solid" href="https://github.com/ZYY817/aiclean/releases/latest">免费下载</a>
-          <a class="tlink" href="https://github.com/ZYY817/aiclean">看源码 <span class="arr" aria-hidden="true">→</span></a>
+          <a class="btn btn--solid" href="https://github.com/ZYY817/aiclean/releases/latest"><span class="zh">免费下载</span><span class="en">Free download</span></a>
+          <a class="tlink" href="https://github.com/ZYY817/aiclean"><span class="zh">看源码</span><span class="en">Source</span> <span class="arr" aria-hidden="true">→</span></a>
         </div>
-        <p class="hero__meta mono"><span>Windows 10/11 64 位</span><span>单文件 4.6 MB</span><span>不联网</span></p>
+        <p class="hero__meta mono"><span class="zh">Windows 10/11 64 位</span><span class="en">Windows 10/11 64-bit</span><span class="zh">单文件 4.5 MB</span><span class="en">Single 4.5 MB file</span><span class="zh">不联网</span><span class="en">Fully offline</span></p>
       </div>
       <div class="hero__shot" data-scrub="view">
         <div class="win__bar" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -82,9 +90,9 @@
 
     <!-- ======================= 屏 2 · 三件事（半屏高） ======================= -->
     <section class="trio" aria-label="它做三件事">
-      <div class="t"><b>看清</b><p>全盘扫描后画成 198 个格子，每一格是谁占的、占了多少，都有标注。</p></div>
-      <div class="t"><b>清掉</b><p>缓存按住即清。清理前先查占用，不影响运行中的软件。</p></div>
-      <div class="t"><b>搬走</b><p>AI 应用的对话记录、模型文件等大文件夹迁往其他盘，原位保留链接，随时可迁回。</p></div>
+      <div class="t"><b><span class="zh">看清</span><span class="en">See</span></b><p><span class="zh">全盘扫描后画成 198 个格子，每一格是谁占的、占了多少，都有标注。</span><span class="en">The whole drive is drawn as 198 cells — every cell is labeled with what owns it and how much it takes.</span></p></div>
+      <div class="t"><b><span class="zh">清掉</span><span class="en">Clean</span></b><p><span class="zh">缓存按住即清。清理前先查占用，不影响运行中的软件。</span><span class="en">Hold to clean caches. Locks are checked first, so running apps are never touched.</span></p></div>
+      <div class="t"><b><span class="zh">搬走</span><span class="en">Move</span></b><p><span class="zh">AI 应用的对话记录、模型文件等大文件夹迁往其他盘，原位保留链接，随时可迁回。</span><span class="en">Big AI folders — chat history, model files — migrate to another drive with a link left in place, reversible anytime.</span></p></div>
     </section>
 
     <!-- ======================= 屏 2 · 演示（钉住，三步） =======================
@@ -102,6 +110,8 @@
           <p class="demo__d" id="demoD">AIClean 打开即扫描，扫描结果就画成这张图。</p>
         </header>
 
+        <!-- demo__t/demo__d 的文案由 disk.js 按语言动态写入 -->
+
         <div class="gmapwrap" id="gmapwrap">
           <div class="gmap cells" id="gmap" data-f="" aria-hidden="true"></div>
           <div class="sheen" id="sheen" aria-hidden="true"></div>
@@ -110,50 +120,50 @@
           <div class="gtip" id="gtip" aria-hidden="true"></div>
 
           <!-- 引线标注：一直在，不淡出。--ty 是标注线在格图里的纵向位置 -->
-          <span class="glabel" data-g="sys"     data-side="r" style="--ty:31.8%">系统占用 <b>114.8 GB</b></span>
-          <span class="glabel" data-g="stat"    data-side="l" style="--ty:68.2%">仅统计 <b>36.3 GB</b></span>
-          <span class="glabel" data-g="clean"   data-side="r" style="--ty:77.3%">可清理 <b>18.2 GB</b></span>
-          <span class="glabel" data-g="busy"    data-side="l" style="--ty:86.4%">正在使用 <b>6.81 GB</b></span>
-          <span class="glabel" data-g="confirm" data-side="r" style="--ty:86.4%">待确认 <b>10.8 GB</b></span>
-          <span class="glabel" data-g="free"    data-side="l" style="--ty:95.5%">空闲 <b>8.32 GB</b></span>
-          <span class="glabel" data-g="move"    data-side="r" style="--ty:95.5%">建议迁移 <b>2.89 GB</b></span>
+          <span class="glabel" data-g="sys"     data-side="r" style="--ty:31.8%"><span class="zh">系统占用</span><span class="en">System</span> <b>114.8 GB</b></span>
+          <span class="glabel" data-g="stat"    data-side="l" style="--ty:68.2%"><span class="zh">仅统计</span><span class="en">Counted</span> <b>36.3 GB</b></span>
+          <span class="glabel" data-g="clean"   data-side="r" style="--ty:77.3%"><span class="zh">可清理</span><span class="en">Cleanable</span> <b>18.2 GB</b></span>
+          <span class="glabel" data-g="busy"    data-side="l" style="--ty:86.4%"><span class="zh">正在使用</span><span class="en">In use</span> <b>6.81 GB</b></span>
+          <span class="glabel" data-g="confirm" data-side="r" style="--ty:86.4%"><span class="zh">待确认</span><span class="en">Review</span> <b>10.8 GB</b></span>
+          <span class="glabel" data-g="free"    data-side="l" style="--ty:95.5%"><span class="zh">空闲</span><span class="en">Free</span> <b>8.32 GB</b></span>
+          <span class="glabel" data-g="move"    data-side="r" style="--ty:95.5%"><span class="zh">建议迁移</span><span class="en">Migrate</span> <b>2.89 GB</b></span>
 
           <!-- 右侧：累计读数 + D 盘方框 -->
-          <div class="demo__read" id="demoRead"><span class="demo__readl">已腾出</span><b id="freedN">0.0</b><i>GB</i></div>
-          <div class="dbox" id="dbox"><span class="dbox__lbl mono">D 盘</span><div class="dbox__cells"><i></i><i></i><i></i></div></div>
+          <div class="demo__read" id="demoRead"><span class="demo__readl"><span class="zh">已腾出</span><span class="en">Freed</span></span><b id="freedN">0.0</b><i>GB</i></div>
+          <div class="dbox" id="dbox"><span class="dbox__lbl mono"><span class="zh">D 盘</span><span class="en">D:</span></span><div class="dbox__cells"><i></i><i></i><i></i></div></div>
         </div>
 
         <!-- 窄屏时的标注（替代引线） -->
         <div class="demo__chips" id="demoChips" aria-hidden="true">
-          <span data-g="sys">系统 114.8</span><span data-g="stat">统计 36.3</span><span data-g="clean">可清 18.2</span><span data-g="busy">占用 6.81</span><span data-g="confirm">待确认 10.8</span><span data-g="move">迁移 2.89</span>
+          <span data-g="sys"><span class="zh">系统 114.8</span><span class="en">Sys 114.8</span></span><span data-g="stat"><span class="zh">统计 36.3</span><span class="en">Stat 36.3</span></span><span data-g="clean"><span class="zh">可清 18.2</span><span class="en">Clean 18.2</span></span><span data-g="busy"><span class="zh">占用 6.81</span><span class="en">Busy 6.81</span></span><span data-g="confirm"><span class="zh">待确认 10.8</span><span class="en">Review 10.8</span></span><span data-g="move"><span class="zh">迁移 2.89</span><span class="en">Move 2.89</span></span>
         </div>
 
-        <div class="occwrap"><span class="occlab mono">已占用 <b id="occPct">96</b>%</span><div class="occbar"><i id="occFill"></i></div></div>
+        <div class="occwrap"><span class="occlab mono"><span class="zh">已占用</span><span class="en">Used</span> <b id="occPct">96</b>%</span><div class="occbar"><i id="occFill"></i></div></div>
 
         <div class="demo__tail" id="demoTail">
-          <button class="gbtn cmpt" id="cmpBtn" type="button"><span class="cmpt__a">清理前</span><i class="cmpt__sw"></i><span class="cmpt__b">清理后</span></button>
-          <p class="demo__result" id="demoRes">这台电脑腾出了 <b>21.1 GB</b>，可用空间从 8.32 GB 变成 29.4 GB</p>
+          <button class="gbtn cmpt" id="cmpBtn" type="button"><span class="cmpt__a"><span class="zh">清理前</span><span class="en">Before</span></span><i class="cmpt__sw"></i><span class="cmpt__b"><span class="zh">清理后</span><span class="en">After</span></span></button>
+          <p class="demo__result" id="demoRes"><span class="zh">这台电脑腾出了 <b>21.1 GB</b>，可用空间从 8.32 GB 变成 29.4 GB</span><span class="en">This machine freed <b>21.1 GB</b> — free space went from 8.32 GB to 29.4 GB</span></p>
         </div>
 
         <!-- 减动效模式：静态前后对比，不播动画 -->
         <div class="demo__rm">
-          <div class="rmcol"><p class="mono">清理前</p><div class="rmgrid cells" id="rmBefore"></div></div>
-          <div class="rmcol"><p class="mono">清理后</p><div class="rmgrid cells" id="rmAfter"></div></div>
-          <p class="demo__result">这台电脑腾出了 <b>21.1 GB</b>，可用空间从 8.32 GB 变成 29.4 GB</p>
+          <div class="rmcol"><p class="mono"><span class="zh">清理前</span><span class="en">Before</span></p><div class="rmgrid cells" id="rmBefore"></div></div>
+          <div class="rmcol"><p class="mono"><span class="zh">清理后</span><span class="en">After</span></p><div class="rmgrid cells" id="rmAfter"></div></div>
+          <p class="demo__result"><span class="zh">这台电脑腾出了 <b>21.1 GB</b>，可用空间从 8.32 GB 变成 29.4 GB</span><span class="en">This machine freed <b>21.1 GB</b> — free space went from 8.32 GB to 29.4 GB</span></p>
         </div>
       </div>
     </section>
 
     <!-- ======================= 屏 4 · 六个功能（正常滚动，卡片堆叠） ======================= -->
     <section class="feats" id="features" aria-labelledby="feat-t">
-      <h2 class="feats__t" id="feat-t">六项功能</h2>
+      <h2 class="feats__t" id="feat-t"><span class="zh">六项功能</span><span class="en">Six features</span></h2>
       <div class="feats__stack">
 
         <article class="fcard" style="--i:0">
           <div class="fcard__in">
             <span class="fcard__no mono" aria-hidden="true">01</span>
-            <h3 class="fcard__t">格子地图</h3>
-            <p class="fcard__d">整块盘画成一张图，一格约 1 GB。指针停在任意一格，即显示其归属软件与占用大小。</p>
+            <h3 class="fcard__t"><span class="zh">格子地图</span><span class="en">Grid map</span></h3>
+            <p class="fcard__d"><span class="zh">整块盘画成一张图，一格约 1 GB。指针停在任意一格，即显示其归属软件与占用大小。</span><span class="en">The whole drive as one map, about 1 GB per cell. Hover any cell to see what owns it and how much it takes.</span></p>
             <div class="fcard__viz"><div class="cardmap" id="cardmap" aria-hidden="true"></div></div>
           </div>
         </article>
@@ -161,14 +171,14 @@
         <article class="fcard" style="--i:1">
           <div class="fcard__in">
             <span class="fcard__no mono" aria-hidden="true">02</span>
-            <h3 class="fcard__t">分类清理</h3>
-            <p class="fcard__d">内置 228 条规则，覆盖各家 AI 应用、开发环境和常见软件的缓存位置；未收录的 Electron 应用自动补查。300 MB 以上大文件单独列出，重复文件按指纹比对。</p>
+            <h3 class="fcard__t"><span class="zh">分类清理</span><span class="en">Smart cleanup</span></h3>
+            <p class="fcard__d"><span class="zh">内置 335 条规则，覆盖各家 AI 应用、开发环境、常见软件缓存与注册表残留；未收录的 Electron 应用自动补查。300 MB 以上大文件单独列出，重复文件按指纹比对。</span><span class="en">335 built-in rules covering AI apps, dev toolchains, common software caches and registry leftovers; unknown Electron apps get heuristic scans. Files over 300 MB list separately, duplicates are matched by fingerprint.</span></p>
             <div class="fcard__viz">
               <div class="rows mono" aria-hidden="true">
                 <div><span>NVIDIA DXCache</span><b>10.5 GB</b></div>
-                <div><span>DirectX 着色器缓存</span><b>4.05 GB</b></div>
+                <div><span><span class="zh">DirectX 着色器缓存</span><span class="en">DirectX shader cache</span></span><b>4.05 GB</b></div>
                 <div><span>Playwright</span><b>718 MB</b></div>
-                <div><span>Go 编译缓存</span><b>358 MB</b></div>
+                <div><span><span class="zh">Go 编译缓存</span><span class="en">Go build cache</span></span><b>358 MB</b></div>
               </div>
             </div>
           </div>
@@ -177,32 +187,32 @@
         <article class="fcard" style="--i:2">
           <div class="fcard__in">
             <span class="fcard__no mono" aria-hidden="true">03</span>
-            <h3 class="fcard__t">迁移</h3>
-            <p class="fcard__d">AI 应用的对话记录、模型文件等大文件夹迁往其他盘，对软件而言路径始终不变。迁移分复制、校验、备份、建链接、验证五步，任何一步出错自动还原。</p>
-            <div class="fcard__viz"><ol class="chain mono" aria-hidden="true"><li>复制</li><li>校验</li><li>备份</li><li>建链接</li><li>验证</li></ol></div>
+            <h3 class="fcard__t"><span class="zh">迁移</span><span class="en">Migration</span></h3>
+            <p class="fcard__d"><span class="zh">AI 应用的对话记录、模型文件等大文件夹迁往其他盘，对软件而言路径始终不变。迁移分复制、校验、备份、建链接、验证五步，任何一步出错自动还原。</span><span class="en">Big AI folders move to another drive while apps keep seeing the same path. Migration runs five steps — copy, verify, backup, link, validate — and auto-rolls-back on any failure.</span></p>
+            <div class="fcard__viz"><ol class="chain mono" aria-hidden="true"><li><span class="zh">复制</span><span class="en">Copy</span></li><li><span class="zh">校验</span><span class="en">Verify</span></li><li><span class="zh">备份</span><span class="en">Backup</span></li><li><span class="zh">建链接</span><span class="en">Link</span></li><li><span class="zh">验证</span><span class="en">Check</span></li></ol></div>
           </div>
         </article>
 
         <article class="fcard" style="--i:3">
           <div class="fcard__in">
             <span class="fcard__no mono" aria-hidden="true">04</span>
-            <h3 class="fcard__t">定时清理</h3>
-            <p class="fcard__d">基于 Windows 计划任务，仅清理低风险缓存，周期自定。开启时会先弹窗列出将清理的内容。</p>
-            <div class="fcard__viz"><div class="switch mono" aria-hidden="true"><span>定时清理</span><i></i><b>默认关闭</b></div></div>
+            <h3 class="fcard__t"><span class="zh">定时清理</span><span class="en">Scheduled clean</span></h3>
+            <p class="fcard__d"><span class="zh">基于 Windows 计划任务，仅清理低风险缓存，周期自定。开启时会先弹窗列出将清理的内容。</span><span class="en">Runs on Windows Task Scheduler, low-risk caches only, on your own cadence. Enabling it shows exactly what will be cleaned first.</span></p>
+            <div class="fcard__viz"><div class="switch mono" aria-hidden="true"><span><span class="zh">定时清理</span><span class="en">Schedule</span></span><i></i><b><span class="zh">默认关闭</span><span class="en">Off by default</span></b></div></div>
           </div>
         </article>
 
         <article class="fcard" style="--i:4">
           <div class="fcard__in">
             <span class="fcard__no mono" aria-hidden="true">05</span>
-            <h3 class="fcard__t">残留区和日志</h3>
-            <p class="fcard__d">暂时无法删除的文件先进入残留区，可重试、可恢复，逾期自动清除。每一次操作均写入日志。</p>
+            <h3 class="fcard__t"><span class="zh">残留区和日志</span><span class="en">Quarantine & logs</span></h3>
+            <p class="fcard__d"><span class="zh">暂时无法删除的文件先进入残留区，可重试、可恢复，逾期自动清除。每一次操作均写入日志。</span><span class="en">Items that can't be deleted go to a quarantine area — retryable, restorable, auto-purged when overdue. Every operation is logged.</span></p>
             <div class="fcard__viz">
               <div class="rows mono" aria-hidden="true">
-                <div><span>清理</span><b>已记录</b></div>
-                <div><span>迁移</span><b>已记录</b></div>
-                <div><span>迁回</span><b>已记录</b></div>
-                <div><span>删除备份</span><b>已记录</b></div>
+                <div><span><span class="zh">清理</span><span class="en">Clean</span></span><b><span class="zh">已记录</span><span class="en">Logged</span></b></div>
+                <div><span><span class="zh">迁移</span><span class="en">Migrate</span></span><b><span class="zh">已记录</span><span class="en">Logged</span></b></div>
+                <div><span><span class="zh">迁回</span><span class="en">Migrate back</span></span><b><span class="zh">已记录</span><span class="en">Logged</span></b></div>
+                <div><span><span class="zh">删除备份</span><span class="en">Purge backup</span></span><b><span class="zh">已记录</span><span class="en">Logged</span></b></div>
               </div>
             </div>
           </div>
@@ -211,9 +221,9 @@
         <article class="fcard" style="--i:5">
           <div class="fcard__in">
             <span class="fcard__no mono" aria-hidden="true">06</span>
-            <h3 class="fcard__t">卸载</h3>
-            <p class="fcard__d">卸载时一并移除自身创建的内容。选择保留的数据会在桌面生成清单，标明存放位置。</p>
-            <div class="fcard__viz"><ul class="gone mono" aria-hidden="true"><li>计划任务</li><li>开机自启</li><li>数据目录</li><li>注册表项</li></ul></div>
+            <h3 class="fcard__t"><span class="zh">卸载</span><span class="en">Clean uninstall</span></h3>
+            <p class="fcard__d"><span class="zh">卸载时一并移除自身创建的内容。选择保留的数据会在桌面生成清单，标明存放位置。</span><span class="en">Uninstalling removes everything the app itself created. Anything you keep gets a manifest on your desktop with its location.</span></p>
+            <div class="fcard__viz"><ul class="gone mono" aria-hidden="true"><li><span class="zh">计划任务</span><span class="en">Scheduled task</span></li><li><span class="zh">开机自启</span><span class="en">Autostart</span></li><li><span class="zh">数据目录</span><span class="en">Data dir</span></li><li><span class="zh">注册表项</span><span class="en">Registry keys</span></li></ul></div>
           </div>
         </article>
 
@@ -221,51 +231,51 @@
     </section>
 
     <!-- ======================= 字带 ======================= -->
-    <div class="band" data-scrub="view" aria-label="228 条规则，单文件 4.6 MB，0 次联网，源码公开">
-      <p class="band__row band__row--a" aria-hidden="true">228 条规则<i></i>4.6 MB<i></i>0 次联网<i></i>源码公开<i></i>228 条规则<i></i>4.6 MB<i></i>0 次联网<i></i>源码公开</p>
-      <p class="band__row band__row--b" aria-hidden="true">按住才删<i></i>搬走能搬回<i></i>不用安装<i></i>按住才删<i></i>搬走能搬回<i></i>不用安装<i></i>按住才删</p>
+    <div class="band" data-scrub="view" aria-label="335 条规则，单文件 4.5 MB，0 次联网，源码公开">
+      <p class="band__row band__row--a" aria-hidden="true"><span class="zh">335 条规则</span><span class="en">335 rules</span><i></i>4.5 MB<i></i><span class="zh">0 次联网</span><span class="en">0 network</span><i></i><span class="zh">源码公开</span><span class="en">Open source</span><i></i><span class="zh">335 条规则</span><span class="en">335 rules</span><i></i>4.5 MB<i></i><span class="zh">0 次联网</span><span class="en">0 network</span><i></i><span class="zh">源码公开</span><span class="en">Open source</span></p>
+      <p class="band__row band__row--b" aria-hidden="true"><span class="zh">按住才删</span><span class="en">Hold to delete</span><i></i><span class="zh">搬走能搬回</span><span class="en">Reversible</span><i></i><span class="zh">不用安装</span><span class="en">No install</span><i></i><span class="zh">按住才删</span><span class="en">Hold to delete</span><i></i><span class="zh">搬走能搬回</span><span class="en">Reversible</span><i></i><span class="zh">不用安装</span><span class="en">No install</span><i></i><span class="zh">按住才删</span><span class="en">Hold to delete</span></p>
     </div>
 
     <!-- ======================= 屏 4 · 主题从中心扩散 =======================
          三套主题用 clip-path 圆从屏幕中心扩散重上色；
          截图居中跟鼠标轻斜，巨型主题名垫在后面。 -->
     <section class="faces" id="themes" data-scrub="pin" aria-labelledby="themes-t">
-      <h2 class="sr-only" id="themes-t">三套配色：雾白、克莱因蓝、夜墨</h2>
+      <h2 class="sr-only" id="themes-t"><span class="zh">三套配色：雾白、克莱因蓝、夜墨</span><span class="en">Three themes: fog, Klein blue, ink</span></h2>
       <div class="faces__stage">
 
         <div class="face theme-fog" data-face="0">
-          <span class="face__big" aria-hidden="true">雾白</span>
+          <span class="face__big" aria-hidden="true"><span class="zh">雾白</span><span class="en">FOG</span></span>
           <div class="win"><div class="win__bar" aria-hidden="true"><i></i><i></i><i></i></div>
             <img src="assets/home.png" alt="AIClean 雾白主题的总览页" width="2452" height="1626">
           </div>
           <div class="face__txt">
-            <p class="face__k mono">配色 1 / 3</p>
-            <p class="face__t">雾白</p>
-            <p class="face__d">明亮的日间主题，长时间使用不刺眼。</p>
+            <p class="face__k mono"><span class="zh">配色 1 / 3</span><span class="en">Theme 1 / 3</span></p>
+            <p class="face__t"><span class="zh">雾白</span><span class="en">Fog</span></p>
+            <p class="face__d"><span class="zh">明亮的日间主题，长时间使用不刺眼。</span><span class="en">A bright daytime theme that stays easy on the eyes.</span></p>
           </div>
         </div>
 
         <div class="face theme-ikb" data-face="1">
-          <span class="face__big" aria-hidden="true">克莱因蓝</span>
+          <span class="face__big" aria-hidden="true"><span class="zh">克莱因蓝</span><span class="en">KLEIN</span></span>
           <div class="win"><div class="win__bar" aria-hidden="true"><i></i><i></i><i></i></div>
             <img src="assets/home-ikb.png" alt="AIClean 克莱因蓝主题的总览页" width="2452" height="1626">
           </div>
           <div class="face__txt">
-            <p class="face__k mono">配色 2 / 3</p>
-            <p class="face__t">克莱因蓝</p>
-            <p class="face__d">整屏深蓝底，重点信息以荧光黄标出。</p>
+            <p class="face__k mono"><span class="zh">配色 2 / 3</span><span class="en">Theme 2 / 3</span></p>
+            <p class="face__t"><span class="zh">克莱因蓝</span><span class="en">Klein blue</span></p>
+            <p class="face__d"><span class="zh">整屏深蓝底，重点信息以荧光黄标出。</span><span class="en">Deep blue page with fluorescent yellow accents.</span></p>
           </div>
         </div>
 
         <div class="face theme-ink" data-face="2">
-          <span class="face__big" aria-hidden="true">夜墨</span>
+          <span class="face__big" aria-hidden="true"><span class="zh">夜墨</span><span class="en">INK</span></span>
           <div class="win"><div class="win__bar" aria-hidden="true"><i></i><i></i><i></i></div>
             <img src="assets/home-ink.png" alt="AIClean 夜墨主题的总览页" width="2452" height="1626">
           </div>
           <div class="face__txt">
-            <p class="face__k mono">配色 3 / 3</p>
-            <p class="face__t">夜墨</p>
-            <p class="face__d">适合夜间使用。本页右上角三个小方块可同步换色。</p>
+            <p class="face__k mono"><span class="zh">配色 3 / 3</span><span class="en">Theme 3 / 3</span></p>
+            <p class="face__t"><span class="zh">夜墨</span><span class="en">Ink</span></p>
+            <p class="face__d"><span class="zh">适合夜间使用。本页右上角三个小方块可同步换色。</span><span class="en">Made for night use. The three squares top-right switch it live.</span></p>
           </div>
         </div>
 
@@ -274,31 +284,31 @@
 
     <!-- ======================= 屏 7 · 安全（正常滚动，居中竖排） ======================= -->
     <section class="safe" id="safety" aria-labelledby="safe-t">
-      <h2 class="safe__t" id="safe-t">凭什么敢让它动 C 盘</h2>
+      <h2 class="safe__t" id="safe-t"><span class="zh">凭什么敢让它动 C 盘</span><span class="en">Why it's safe on your C: drive</span></h2>
       <ol class="safe__list" id="safeSeq">
         <li class="safe__item">
-          <h3 class="safe__big">按住几秒才执行</h3>
-          <p class="safe__d">直接删除、清空回收站、删除迁移备份均不可恢复，按钮须按住数秒方生效，中途松手即取消。</p>
+          <h3 class="safe__big"><span class="zh">按住几秒才执行</span><span class="en">Hold to confirm</span></h3>
+          <p class="safe__d"><span class="zh">直接删除、清空回收站、删除迁移备份均不可恢复，按钮须按住数秒方生效，中途松手即取消。</span><span class="en">Irreversible actions — permanent delete, emptying the recycle bin, purging migration backups — require holding the button for a few seconds. Let go and it's cancelled.</span></p>
         </li>
         <li class="safe__item">
-          <h3 class="safe__big">动手前先查占用</h3>
-          <p class="safe__d">删除与迁移之前先检测目标是否被程序占用，占用中的跳过，待程序关闭后再处理。</p>
+          <h3 class="safe__big"><span class="zh">动手前先查占用</span><span class="en">Locks checked first</span></h3>
+          <p class="safe__d"><span class="zh">删除与迁移之前先检测目标是否被程序占用，占用中的跳过，待程序关闭后再处理。</span><span class="en">Before deleting or migrating, it checks whether the target is in use by a running program — busy items are skipped until the app closes.</span></p>
         </li>
         <li class="safe__item">
-          <h3 class="safe__big">迁移失败自动还原</h3>
-          <p class="safe__d">迁移分复制、校验、备份、建链接、验证五步，任一步失败均自动回退，原数据不受损。</p>
+          <h3 class="safe__big"><span class="zh">迁移失败自动还原</span><span class="en">Auto rollback</span></h3>
+          <p class="safe__d"><span class="zh">迁移分复制、校验、备份、建链接、验证五步，任一步失败均自动回退，原数据不受损。</span><span class="en">Migration runs in five steps — copy, verify, backup, link, validate. Any step failing rolls everything back; your data is untouched.</span></p>
         </li>
         <li class="safe__item">
-          <h3 class="safe__big">删备份前先校验</h3>
-          <p class="safe__d">删除迁移备份前，先确认链接指向正确、目标数据完整，任一校验不通过则不执行。</p>
+          <h3 class="safe__big"><span class="zh">删备份前先校验</span><span class="en">Verified before purge</span></h3>
+          <p class="safe__d"><span class="zh">删除迁移备份前，先确认链接指向正确、目标数据完整，任一校验不通过则不执行。</span><span class="en">Before a migration backup can be purged, the link target and data integrity are verified first — no check, no delete.</span></p>
         </li>
         <li class="safe__item">
-          <h3 class="safe__big">首次运行先看说明</h3>
-          <p class="safe__d">首次运行会先弹出使用说明，明确列出不可恢复的操作，阅读后再开始使用。</p>
+          <h3 class="safe__big"><span class="zh">首次运行先看说明</span><span class="en">Briefed on first run</span></h3>
+          <p class="safe__d"><span class="zh">首次运行会先弹出使用说明，明确列出不可恢复的操作，阅读后再开始使用。</span><span class="en">The first launch shows a usage guide that calls out every irreversible operation before you start.</span></p>
         </li>
         <li class="safe__item">
-          <h3 class="safe__big">只动本轮扫描结果</h3>
-          <p class="safe__d">可操作范围仅限当次扫描出的目录，过程中不会临时增加其他路径。</p>
+          <h3 class="safe__big"><span class="zh">只动本轮扫描结果</span><span class="en">Scan-scoped actions</span></h3>
+          <p class="safe__d"><span class="zh">可操作范围仅限当次扫描出的目录，过程中不会临时增加其他路径。</span><span class="en">Actions are limited to what the current scan found — nothing outside that list is ever touched.</span></p>
         </li>
       </ol>
     </section>
@@ -307,19 +317,19 @@
     <section class="dl" id="download" aria-labelledby="dl-t">
       <div class="dl__grid cells" id="dlgrid" aria-hidden="true"></div>
       <div class="dl__in">
-        <h2 class="dl__t" id="dl-t" data-rv>4.6 MB，<br>下完双击就能用。</h2>
-        <p class="dl__meta mono" data-rv>v1.0.0 · 免费 · 开源 · 不用安装</p>
+        <h2 class="dl__t" id="dl-t" data-rv><span class="zh">4.5 MB，<br>下完双击就能用。</span><span class="en">4.5 MB —<br>download and run.</span></h2>
+        <p class="dl__meta mono" data-rv><span class="zh">v1.1.0 · 免费 · 开源 · 不用安装</span><span class="en">v1.1.0 · free · open source · no install</span></p>
         <div class="holdzone" data-rv>
           <a class="holdbtn" id="holdbtn" href="https://github.com/ZYY817/aiclean/releases/latest"
              aria-label="按住约一秒下载 AIClean" data-hold="650">
             <span class="holdbtn__fill" aria-hidden="true"></span>
-            <span class="holdbtn__label">按住，下载</span>
-            <span class="holdbtn__hint">和软件里一样</span>
+            <span class="holdbtn__label"><span class="zh">按住，下载</span><span class="en">Hold to download</span></span>
+            <span class="holdbtn__hint"><span class="zh">和软件里一样</span><span class="en">same as the app</span></span>
             <span class="holdbtn__pips" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
           </a>
-          <p class="dl__alt">也可以直接前往 <a href="https://github.com/ZYY817/aiclean/releases/latest">Releases 页面</a> 下载。</p>
+          <p class="dl__alt"><span class="zh">也可以直接前往 <a href="https://github.com/ZYY817/aiclean/releases/latest">Releases 页面</a> 下载。</span><span class="en">Or grab it from the <a href="https://github.com/ZYY817/aiclean/releases/latest">Releases page</a>.</span></p>
         </div>
-        <p class="dl__sys mono" data-rv><span>AIClean.exe</span><span>Windows 10/11 64 位</span><span>需要管理员权限时会提示</span></p>
+        <p class="dl__sys mono" data-rv><span>AIClean.exe</span><span><span class="zh">Windows 10/11 64 位</span><span class="en">Windows 10/11 64-bit</span></span><span><span class="zh">需要管理员权限时会提示</span><span class="en">Prompts when admin is needed</span></span></p>
       </div>
     </section>
   </main>
@@ -328,19 +338,19 @@
   <footer class="footer theme-ink" data-scrub="view">
     <div class="wrap">
       <div class="footer__top">
-        <p class="footer__slogan">使用中遇到问题，可以到 B 站给 UP 主留言。</p>
+        <p class="footer__slogan"><span class="zh">使用中遇到问题，可以到 B 站给 UP 主留言。</span><span class="en">Questions or issues? Leave a comment on the author's Bilibili channel.</span></p>
         <div class="footer__author">
           <p class="name">智宇丶817</p>
-          <p class="role">B 站 UP 主，分享软件和问题解决办法</p>
+          <p class="role"><span class="zh">B 站 UP 主，分享软件和问题解决办法</span><span class="en">Bilibili creator sharing software and fixes</span></p>
           <a href="https://space.bilibili.com/41173761">space.bilibili.com/41173761 →</a>
         </div>
       </div>
       <div class="footer__bar">
         <span>© 2026 AIClean</span>
         <span class="spacer"></span>
-        <a href="https://github.com/ZYY817/aiclean">GitHub 源码</a>
+        <a href="https://github.com/ZYY817/aiclean"><span class="zh">GitHub 源码</span><span class="en">GitHub</span></a>
         <a href="https://github.com/ZYY817/aiclean/releases/latest">Releases</a>
-        <a href="#top">回到顶部 ↑</a>
+        <a href="#top"><span class="zh">回到顶部 ↑</span><span class="en">Back to top ↑</span></a>
       </div>
     </div>
     <div class="footer__mark" aria-hidden="true">AICLEAN</div>

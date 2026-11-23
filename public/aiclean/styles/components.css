@@ -57,6 +57,19 @@
   .tdot--ikb { background: #0B2FC2; border-color: #0B2FC2; }
   .tdot--ink { background: #121516; }
 
+  /* 中 / EN 切换 */
+  .ldots { display: flex; gap: 4px; }
+  .ldot {
+    font: 600 11px/1 var(--mono);
+    color: var(--ink3);
+    padding: 4px 7px;
+    border-radius: 5px;
+    border: 1.5px solid transparent;
+    transition: color .18s, border-color .18s, background-color .18s;
+  }
+  .ldot:hover { color: var(--ink); }
+  .ldot[aria-pressed="true"] { color: var(--acc); border-color: var(--acc); background: var(--hover); }
+
   /* ---------- 按钮 ---------- */
   .btn {
     display: inline-flex; align-items: center; justify-content: center;

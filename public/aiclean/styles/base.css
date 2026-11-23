@@ -31,6 +31,11 @@
   ul[role="list"], ol[role="list"] { list-style: none; padding: 0; }
 
   a { color: inherit; }
+
+  /* 中英双语文案：.zh/.en 成对出现，按 <html lang> 显隐其一 */
+  .en { display: none; }
+  html[lang="en"] .en { display: inline; }
+  html[lang="en"] .zh { display: none; }
 }
 
 @layer base {

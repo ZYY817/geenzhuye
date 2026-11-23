@@ -2,6 +2,7 @@
    main.js · 入口
    全部原生 ES module，无依赖。
    ============================================================ */
+import { initLang } from './i18n.js';
 import { initTheme, currentTheme } from './theme.js';
 import { initReveal } from './reveal.js';
 import { initHold } from './hold.js';
@@ -197,6 +198,7 @@ if ('IntersectionObserver' in window) {
   }, { threshold: 0 }).observe(sentinel);
 }
 
+initLang();
 initTheme();
 initReveal();
 initHold();

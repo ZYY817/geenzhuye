@@ -18,22 +18,36 @@ const CLEAN_GB = 18.2, MOVE_GB = 2.89;
    滚动推进时逐类点亮并保留，直到整张图读得懂。 */
 const ORDER = ['sys', 'stat', 'clean', 'confirm', 'busy', 'move', 'free'];
 
-const HEAD_CAP = ['扫描完成，开始识别', '整盘占用画成一张图，逐类认出来给你看。'];
+import { L, pick } from './i18n.js';
+
+const HEAD_CAP = {
+  zh: ['扫描完成，开始识别', '整盘占用画成一张图，逐类认出来给你看。'],
+  en: ['Scan done, recognizing', 'The whole drive, drawn as one map — being labeled category by category.'],
+};
 
 /* 每类被识别时的说明（一句话） */
 const CAP0 = {
-  sys:     ['灰块：系统和没认出来的', 'Windows 本体加上未被归类的部分，共 114.8 GB。这块不动。'],
-  stat:    ['细描边格：仅统计', '照片、文档、软件本体。标明占用，不做删除。'],
-  clean:   ['蓝格：可清理缓存', '删除后软件会自动重建，这 18.2 GB 可放心清出。'],
-  confirm: ['粗描边格：待你确认', '旧游戏存档、旧安装包等。疑似可删，确认后才执行。'],
-  busy:    ['圆点格：正在使用', '程序运行中不可操作，关闭程序后可再处理。'],
-  move:    ['白块：建议迁移', '各家 AI 应用的模型、聊天记录等不宜删除。迁入 D 盘后原位保留链接，使用不受影响。'],
-  free:    ['虚线格：可用空间', '现在只剩 8.32 GB。演示结束时看它能变成多少。'],
+  sys:     { zh: ['灰块：系统和没认出来的', 'Windows 本体加上未被归类的部分，共 114.8 GB。这块不动。'],
+             en: ['Grey: system & unrecognized', 'Windows itself plus everything unclassified — 114.8 GB. Untouched.'] },
+  stat:    { zh: ['细描边格：仅统计', '照片、文档、软件本体。标明占用，不做删除。'],
+             en: ['Outlined: counted only', 'Photos, documents, app bodies. Measured, never deleted.'] },
+  clean:   { zh: ['蓝格：可清理缓存', '删除后软件会自动重建，这 18.2 GB 可放心清出。'],
+             en: ['Blue: cleanable cache', 'Apps rebuild these on demand — 18.2 GB safe to free.'] },
+  confirm: { zh: ['粗描边格：待你确认', '旧游戏存档、旧安装包等。疑似可删，确认后才执行。'],
+             en: ['Bold outline: needs your call', 'Old saves, old installers. Probably safe — runs only after you confirm.'] },
+  busy:    { zh: ['圆点格：正在使用', '程序运行中不可操作，关闭程序后可再处理。'],
+             en: ['Dotted: in use', 'Locked by running apps — handle them after closing.'] },
+  move:    { zh: ['白块：建议迁移', '各家 AI 应用的模型、聊天记录等不宜删除。迁入 D 盘后原位保留链接，使用不受影响。'],
+             en: ['White: migrate', 'AI models and chat history — too valuable to delete. Moved to D: with a link left behind.'] },
+  free:    { zh: ['虚线格：可用空间', '现在只剩 8.32 GB。演示结束时看它能变成多少。'],
+             en: ['Dashed: free space', 'Only 8.32 GB left now. Watch what it becomes.'] },
 };
 const STEP_CAP = [
   null,
-  ['按住，开始清理', '向下滚动即按住。蓝格逐个清出，可用空间实时增加。'],
-  ['迁移到 D 盘', '文件沿虚线轨迹移入 D 盘，原位保留链接标记。占用同样释放。'],
+  { zh: ['按住，开始清理', '向下滚动即按住。蓝格逐个清出，可用空间实时增加。'],
+    en: ['Hold to clean', 'Scrolling down is the hold. Blue cells free up one by one.'] },
+  { zh: ['迁移到 D 盘', '文件沿虚线轨迹移入 D 盘，原位保留链接标记。占用同样释放。'],
+    en: ['Migrate to D:', 'Files follow the dotted path into D:, leaving links in place. Space freed all the same.'] },
 ];
 
 const clamp = v => v < 0 ? 0 : v > 1 ? 1 : v;
@@ -127,7 +141,7 @@ export function initDisk(section, cells) {
   const setAuto = on => {
     player.on = on;
     auto.classList.toggle('on', on);
-    auto.textContent = on ? '❚❚ 暂停' : '▶ 自动演示';
+    auto.textContent = on ? L('❚❚ 暂停', '❚❚ Pause') : L('▶ 自动演示', '▶ Auto demo');
     if (on) {
       if (player.p >= 1) player.p = 0;
       player.t = performance.now();
@@ -189,10 +203,10 @@ export function initDisk(section, cells) {
     let focus, cap;
     if (s === 0) {
       focus = disc ? ORDER[disc - 1] : '';
-      cap = disc ? CAP0[focus] : HEAD_CAP;
+      cap = pick(disc ? CAP0[focus] : HEAD_CAP);
     } else {
       focus = s === 1 ? 'clean' : 'move';
-      cap = STEP_CAP[s];
+      cap = pick(STEP_CAP[s]);
       if (s === 2 && tm > .96) focus = '';   // 尾声撤掉调光，全格回到全亮做对比
     }
     wrap.dataset.f = s === 0 ? '' : focus;   // 第 1 步不调光，识别本身即强调
@@ -265,6 +279,14 @@ export function initDisk(section, cells) {
   /* 演示区离屏：停掉无限扫光（CSS 里 animation-play-state 吃 .live） */
   new IntersectionObserver(([e]) =>
     section.classList.toggle('live', e.isIntersecting)).observe(section);
+
+  /* 切语言：说明文字重取（文案在 pick() 里按 <html lang> 解析） */
+  document.addEventListener('aiclean:lang', () => {
+    capKey = '';
+    render(lastP);
+    if (!player.on) auto.textContent = L('▶ 自动演示', '▶ Auto demo');
+  });
+  auto.textContent = L('▶ 自动演示', '▶ Auto demo'); // 初始语言可能是 EN
 
   /* 滚动驱动：自动演示播放中忽略滚动 */
   return p => { if (!player.on) render(p); };

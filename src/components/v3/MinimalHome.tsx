@@ -37,6 +37,19 @@ const T = {
 /* 入场：每块依次淡入上移（SPEC §4）。i 为出场顺序 */
 const enter = (i: number) => ({ animationDelay: `${i * 60}ms` });
 
+/* 装饰层漂浮光点：[left%, top%, 直径px, 不透明度]——避开正文密集区，撒向画面边缘 */
+const DECO_DOTS: ReadonlyArray<readonly [number, number, number, number]> = [
+  [6, 22, 3, .5], [12, 68, 2, .3], [17, 40, 2, .35], [24, 82, 4, .45],
+  [31, 12, 2, .3], [38, 55, 3, .4], [44, 28, 2, .3], [52, 74, 2, .35],
+  [58, 18, 3, .45], [63, 47, 2, .3], [70, 66, 4, .4], [76, 30, 2, .3],
+  [82, 78, 3, .5], [88, 15, 2, .35], [91, 52, 2, .3], [9, 88, 2, .35],
+  [47, 90, 3, .4], [96, 72, 2, .3],
+];
+/* 十字星点缀：[left%, top%]——agency 页常见的 + 号标记，慢速呼吸闪烁 */
+const DECO_PLUS: ReadonlyArray<readonly [number, number]> = [
+  [15, 33], [47, 9], [79, 62], [33, 87], [68, 88],
+];
+
 function CopyLink({ label, value, copied }: { label: string; value: string; copied: string }) {
   const [state, setState] = useState<"idle" | "ok" | "fail">("idle");
   const copy = async () => {
@@ -242,6 +255,25 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
   return (
     <div className={`v3 min-h-svh w-full ${serifClass} ${settled ? "v3-settled" : ""}`}>
       <SmoothScroll />
+      {/* 装饰层：必须挂在 .v3 根下——放进 motion.main 会被 framer 的 transform 困在盒子里，fixed 失效。
+          DOM 序在 AnimatePresence 之前，z-auto 的内容自然盖在它上面 */}
+      {!openId && (
+        <div className="v3-deco" aria-hidden="true">
+          <span className="v3-ring" />
+          <span className="v3-orb" style={{ left: "9%", top: "58%", width: 210, height: 210 }} />
+          <span className="v3-orb v3-orb-b" style={{ right: "15%", top: "7%", width: 160, height: 160 }} />
+          <span className="v3-deco-ai-ghost v3-serif">AI</span>
+          <span className="v3-deco-ai v3-serif">AI</span>
+          <span className="v3-deco-side">PORTFOLIO — 2026</span>
+          {DECO_PLUS.map((d, i) => (
+            <span key={`p${i}`} className="v3-plus" style={{ left: `${d[0]}%`, top: `${d[1]}%`, animationDelay: `${-i * 1.7}s` }}>+</span>
+          ))}
+          {DECO_DOTS.map((d, i) => (
+            <i key={i} className={`v3-dot${i % 4 === 0 ? " v3-dot-glow" : ""}`}
+              style={{ left: `${d[0]}%`, top: `${d[1]}%`, width: d[2], height: d[2], opacity: d[3], animationDuration: `${16 + (i % 5) * 4}s`, animationDelay: `${-i * 1.9}s` }} />
+          ))}
+        </div>
+      )}
       <LangSwap animate={push}>
       <AnimatePresence mode="wait" initial={false} onExitComplete={onViewSwap}>
       {openId ? (
@@ -268,9 +300,9 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
         <section className={wide ? "mt-10 max-w-[860px]" : "mt-14"}>
           <p className={`v3-in leading-[1.75] text-[var(--ink)] [text-wrap:pretty] ${wide ? "text-[19px] min-[640px]:text-[23px]" : "text-[17px] leading-[1.85] min-[640px]:text-[19px]"}`} style={enter(1)}>
             {lang === "en" ? (
-              <>I’m Zhiyu. I build software with AI to help more people solve real problems.</>
+              <>I’m Zhiyu. I use AI to help more people solve real problems.</>
             ) : (
-              <>我是智宇，用 AI 做软件，帮更多人解决实际问题。</>
+              <>我是智宇，用 AI 帮更多人解决实际问题。</>
             )}
           </p>
           <p className="v3-in mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-1 text-[14px] text-[var(--ink3)]" style={enter(2)}>
@@ -354,74 +386,127 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
         .v3 {
           --bg: #fbfaf8; --ink: #141414; --ink2: #36352f; --ink3: #6f6d67; --ink4: #8d8b86; --ink5: #b5b3ae; --ink6: #c9c7c1;
           --plate: #eceae6; --line: rgba(23,23,23,.2); --line2: rgba(23,23,23,.1); --tint: rgba(23,23,23,.04); --img: none;
-          background: var(--bg); color: var(--ink2); -webkit-font-smoothing: antialiased;
+          --deco: rgba(20,20,20,.04); --dot: rgba(20,20,20,.22); --side: rgba(20,20,20,.35);
+          background: var(--bg-grad, var(--bg));
+          color: var(--ink2); -webkit-font-smoothing: antialiased;
           transition: background-color 320ms ease, color 320ms ease;
         }
         /* 深色：同一张纸的夜晚版——暖黑底、米白墨，没有发光和饱和色（SPEC §11.2） */
         .dark .v3 {
           --bg: #121211; --ink: #ecebe7; --ink2: #b9b7b0; --ink3: #8b8983; --ink4: #7f7d77; --ink5: #5f5d59; --ink6: #4a4946;
           --plate: #1d1c1a; --line: rgba(236,235,231,.22); --line2: rgba(236,235,231,.12); --tint: rgba(236,235,231,.05); --img: brightness(.85);
+         
+          --deco: rgba(236,235,231,.05); --dot: rgba(236,235,231,.22); --side: rgba(236,235,231,.35);
           color-scheme: dark;
         }
 
-        /* 配色方案（2026-11-20 用户定制）：右上角圆点切换，存 localStorage 的 zhiyu-pal，
-           首屏脚本在 hydration 前就把 data-pal 写到 <html> 上，不会闪回原色。--num 是分组序号的专用色 */
-        html[data-pal="amber"] .v3 {
-          --bg: #faf7f0; --ink: #1c2438; --ink2: #2e3a52; --ink3: #687389; --ink4: #8a92a8; --ink5: #b3b9c9; --ink6: #ccd1dd;
-          --plate: #f0ebe1; --line: rgba(28,36,56,.2); --line2: rgba(28,36,56,.1); --tint: rgba(180,83,9,.06);
-          --accent: #b45309; --num: #b45309;
+        /* 配色方案（2026-11-20 用户定制）：右上角圆点选色系，点上即是整页饱和彩色（参考机构站做法），
+           ☾ 换到同色系更深的版本。存 localStorage 的 zhiyu-pal，首屏脚本在 hydration 前把
+           data-pal 写到 <html> 上，不闪回原色。--num 分组序号色 / --sel 选中块色 / --bg-grad 纵向渐变 */
+        html[data-pal="ocean"] .v3 {
+          --bg: #15499e; --bg-grad: linear-gradient(180deg,#1d5fc4 0%,#15499e 60%,#123e8a 100%);
+          --ink: #ffffff; --ink2: #e3ecff; --ink3: #b8ccf0; --ink4: #93aede; --ink5: #6d8fc6; --ink6: #4f6fa8;
+          --plate: #1c55b4; --line: rgba(255,255,255,.25); --line2: rgba(255,255,255,.14); --tint: rgba(255,255,255,.08);
+          --accent: #daeb20; --num: #daeb20; --sel: #daeb20; --sel-ink: #12347a; --img: brightness(.9);
+         
+          --deco: rgba(255,255,255,.07); --dot: rgba(255,255,255,.5); --side: rgba(255,255,255,.4);
+          color-scheme: dark;
         }
-        html.dark[data-pal="amber"] .v3 {
-          --bg: #141a29; --ink: #e8e4dc; --ink2: #b7bcc9; --ink3: #8a92a8; --ink4: #6f7791; --ink5: #565d78; --ink6: #3f465e;
-          --plate: #1c2334; --line: rgba(232,228,220,.2); --line2: rgba(232,228,220,.1); --tint: rgba(217,119,6,.1);
-          --accent: #e09a3c; --num: #e09a3c;
-        }
-        html[data-pal="tech"] .v3 {
-          --bg: #ffffff; --ink: #0b1220; --ink2: #1f2d44; --ink3: #54637d; --ink4: #7d8aa3; --ink5: #aab4c8; --ink6: #c9d2e2;
-          --plate: #eef1f6; --line: rgba(15,35,80,.18); --line2: rgba(15,35,80,.09); --tint: rgba(37,99,235,.05);
-          --accent: #2563eb; --num: #2563eb;
-        }
-        html.dark[data-pal="tech"] .v3 {
-          --bg: #0a1222; --ink: #eaf0fb; --ink2: #a8b6d4; --ink3: #7787ad; --ink4: #5d6d94; --ink5: #46547a; --ink6: #34405f;
-          --plate: #101a30; --line: rgba(190,205,240,.2); --line2: rgba(190,205,240,.1); --tint: rgba(59,130,246,.12);
-          --accent: #60a5fa; --num: #60a5fa;
+        html.dark[data-pal="ocean"] .v3 {
+          --bg: #0a1f4d; --bg-grad: linear-gradient(180deg,#0e2c6b 0%,#0a1f4d 60%,#07163a 100%);
+          --ink: #ffffff; --ink2: #d8e4ff; --ink3: #a9bde9; --ink4: #839bd4; --ink5: #5f78b3; --ink6: #435a90;
+          --plate: #0e2a63; --line: rgba(255,255,255,.24); --line2: rgba(255,255,255,.13); --tint: rgba(255,255,255,.07);
+          --accent: #daeb20; --num: #daeb20; --sel: #daeb20; --sel-ink: #0a1f4d; --img: brightness(.85);
+         
+          --deco: rgba(255,255,255,.06); --dot: rgba(255,255,255,.4); --side: rgba(255,255,255,.35);
         }
         html[data-pal="sky"] .v3 {
-          --bg: #fcfeff; --ink: #101d29; --ink2: #233647; --ink3: #56707f; --ink4: #7e97a6; --ink5: #aec2cd; --ink6: #cbdbe2;
-          --plate: #eef6fa; --line: rgba(14,90,140,.18); --line2: rgba(14,90,140,.09); --tint: rgba(14,165,233,.06);
-          --accent: #0ea5e9; --num: #fb7185;
+          --bg: #04739e; --bg-grad: linear-gradient(180deg,#0798cc,#04739e);
+          --ink: #ffffff; --ink2: #e0f4fb; --ink3: #b3ddee; --ink4: #8fc9e0; --ink5: #66a9c4; --ink6: #47859e;
+          --plate: #0a7fb0; --line: rgba(255,255,255,.25); --line2: rgba(255,255,255,.14); --tint: rgba(255,255,255,.08);
+          --accent: #ff5db8; --num: #ff5db8; --sel: #ff5db8; --sel-ink: #5a1040; --img: brightness(.9);
+         
+          --deco: rgba(255,255,255,.07); --dot: rgba(255,255,255,.5); --side: rgba(255,255,255,.4);
+          color-scheme: dark;
         }
         html.dark[data-pal="sky"] .v3 {
-          --bg: #071420; --ink: #e4f2fb; --ink2: #a4c4d6; --ink3: #7193a8; --ink4: #5a7b90; --ink5: #456073; --ink6: #324a5c;
-          --plate: #0d2030; --line: rgba(190,225,245,.2); --line2: rgba(190,225,245,.1); --tint: rgba(14,165,233,.12);
-          --accent: #38bdf8; --num: #fb8ba0;
+          --bg: #03364d; --bg-grad: linear-gradient(180deg,#045a7d,#03364d);
+          --ink: #ffffff; --ink2: #d4eef8; --ink3: #a2d4e8; --ink4: #7ab6cf; --ink5: #5693ad; --ink6: #3b7189;
+          --plate: #044463; --line: rgba(255,255,255,.24); --line2: rgba(255,255,255,.13); --tint: rgba(255,255,255,.07);
+          --accent: #ff7cc4; --num: #ff7cc4; --sel: #ff7cc4; --sel-ink: #4d0d36; --img: brightness(.85);
+         
+          --deco: rgba(255,255,255,.06); --dot: rgba(255,255,255,.4); --side: rgba(255,255,255,.35);
         }
-        html[data-pal="night"] .v3 {
-          --bg: #f2f5fb; --ink: #101a30; --ink2: #26345a; --ink3: #5a6a94; --ink4: #7e8db4; --ink5: #abb6d6; --ink6: #ccd4e8;
-          --plate: #e6ecf7; --line: rgba(20,40,90,.18); --line2: rgba(20,40,90,.09); --tint: rgba(37,99,235,.05);
-          --accent: #c2410c; --num: #c2410c;
+        html[data-pal="deep"] .v3 {
+          --bg: #09316d; --bg-grad: linear-gradient(180deg,#0d3d8c,#09316d 55%,#072553 100%);
+          --ink: #ffffff; --ink2: #dfe8ff; --ink3: #b3c4f0; --ink4: #8ea3dd; --ink5: #667db8; --ink6: #48598f;
+          --plate: #0d3a80; --line: rgba(255,255,255,.24); --line2: rgba(255,255,255,.13); --tint: rgba(255,255,255,.08);
+          --accent: #fd91cc; --num: #fd91cc; --sel: #fd91cc; --sel-ink: #4d0f33; --img: brightness(.9);
+         
+          --deco: rgba(255,255,255,.07); --dot: rgba(255,255,255,.5); --side: rgba(255,255,255,.4);
+          color-scheme: dark;
         }
-        html.dark[data-pal="night"] .v3 {
-          --bg: #0a0f22; --ink: #e8edff; --ink2: #a9b4dc; --ink3: #7683b3; --ink4: #5e6b96; --ink5: #47527c; --ink6: #333d63;
-          --plate: #121830; --line: rgba(200,214,255,.2); --line2: rgba(200,214,255,.1); --tint: rgba(59,130,246,.12);
-          --accent: #fb923c; --num: #fb923c;
+        html.dark[data-pal="deep"] .v3 {
+          --bg: #04122e; --bg-grad: linear-gradient(180deg,#071c48,#04122e 60%);
+          --ink: #ffffff; --ink2: #d2ddfa; --ink3: #a3b4e4; --ink4: #7e92c9; --ink5: #5a6da3; --ink6: #40517e;
+          --plate: #0a1f52; --line: rgba(255,255,255,.22); --line2: rgba(255,255,255,.12); --tint: rgba(255,255,255,.07);
+          --accent: #fd91cc; --num: #fd91cc; --sel: #fd91cc; --sel-ink: #3d0b28; --img: brightness(.85);
+         
+          --deco: rgba(255,255,255,.06); --dot: rgba(255,255,255,.4); --side: rgba(255,255,255,.35);
         }
-        /* 各配色下 html/body 的底色跟随（防滚动溢出露白边） */
-        html[data-pal="amber"], html[data-pal="amber"] body { background: #faf7f0; }
-        html.dark[data-pal="amber"], html.dark[data-pal="amber"] body { background: #141a29; }
-        html[data-pal="tech"], html[data-pal="tech"] body { background: #ffffff; }
-        html.dark[data-pal="tech"], html.dark[data-pal="tech"] body { background: #0a1222; }
-        html[data-pal="sky"], html[data-pal="sky"] body { background: #fcfeff; }
-        html.dark[data-pal="sky"], html.dark[data-pal="sky"] body { background: #071420; }
-        html[data-pal="night"], html[data-pal="night"] body { background: #f2f5fb; }
-        html.dark[data-pal="night"], html.dark[data-pal="night"] body { background: #0a0f22; }
+        /* flux 本身是一套深色配色（午夜黑 + 电光橙），浅色档是它稍亮的同色系 */
+        html[data-pal="flux"] .v3 {
+          --bg: #02070a; --bg-grad: linear-gradient(180deg,#031220,#02070a 60%);
+          --ink: #eaf4ff; --ink2: #b8d4ef; --ink3: #7fa6cc; --ink4: #62809e; --ink5: #485f78; --ink6: #33475c;
+          --plate: #071624; --line: rgba(160,210,255,.2); --line2: rgba(160,210,255,.1); --tint: rgba(2,151,222,.12);
+          --accent: #0297de; --num: #fc734d; --sel: #0297de; --sel-ink: #eaf4ff; --img: brightness(.85);
+         
+          --deco: rgba(160,210,255,.06); --dot: rgba(190,225,255,.45); --side: rgba(160,210,255,.4);
+          color-scheme: dark;
+        }
+        html.dark[data-pal="flux"] .v3 {
+          --bg: #000000; --bg-grad: linear-gradient(180deg,#020a12,#000000 60%);
+          --ink: #eaf4ff; --ink2: #b8d4ef; --ink3: #7fa6cc; --ink4: #62809e; --ink5: #485f78; --ink6: #33475c;
+          --plate: #040f18; --line: rgba(160,210,255,.2); --line2: rgba(160,210,255,.1); --tint: rgba(2,151,222,.12);
+          --accent: #0297de; --num: #fc734d; --sel: #0297de; --sel-ink: #eaf4ff; --img: brightness(.8);
+         
+          --deco: rgba(160,210,255,.05); --dot: rgba(190,225,255,.4); --side: rgba(160,210,255,.35);
+        }
+        html[data-pal="sunset"] .v3 {
+          --bg: #0079d6; --bg-grad: linear-gradient(180deg,#00a2ff,#0079d6);
+          --ink: #ffffff; --ink2: #e3f2ff; --ink3: #b5d9f7; --ink4: #8fc3ee; --ink5: #66a3d9; --ink6: #4782b8;
+          --plate: #0a8fe8; --line: rgba(255,255,255,.26); --line2: rgba(255,255,255,.14); --tint: rgba(255,255,255,.09);
+          --accent: #ffc531; --num: #ffc531; --sel: #ffc531; --sel-ink: #6b4300; --img: brightness(.92);
+         
+          --deco: rgba(255,255,255,.07); --dot: rgba(255,255,255,.5); --side: rgba(255,255,255,.4);
+          color-scheme: dark;
+        }
+        html.dark[data-pal="sunset"] .v3 {
+          --bg: #034a85; --bg-grad: linear-gradient(180deg,#0468b8,#034a85);
+          --ink: #ffffff; --ink2: #d8edff; --ink3: #a8cff2; --ink4: #82b2e0; --ink5: #5b92c4; --ink6: #3f74a3;
+          --plate: #055a9e; --line: rgba(255,255,255,.24); --line2: rgba(255,255,255,.13); --tint: rgba(255,255,255,.08);
+          --accent: #ffc531; --num: #ffd04d; --sel: #ffc531; --sel-ink: #5c3a00; --img: brightness(.88);
+         
+          --deco: rgba(255,255,255,.06); --dot: rgba(255,255,255,.4); --side: rgba(255,255,255,.35);
+        }
+        /* 各配色下 html/body 的底色跟随（防滚动溢出露边） */
+        html[data-pal="ocean"], html[data-pal="ocean"] body { background: #123e8a; }
+        html.dark[data-pal="ocean"], html.dark[data-pal="ocean"] body { background: #07163a; }
+        html[data-pal="sky"], html[data-pal="sky"] body { background: #04739e; }
+        html.dark[data-pal="sky"], html.dark[data-pal="sky"] body { background: #022a3d; }
+        html[data-pal="deep"], html[data-pal="deep"] body { background: #072553; }
+        html.dark[data-pal="deep"], html.dark[data-pal="deep"] body { background: #04122e; }
+        html[data-pal="flux"], html[data-pal="flux"] body { background: #02070a; }
+        html.dark[data-pal="flux"], html.dark[data-pal="flux"] body { background: #000000; }
+        html[data-pal="sunset"], html[data-pal="sunset"] body { background: #0079d6; }
+        html.dark[data-pal="sunset"], html.dark[data-pal="sunset"] body { background: #034a85; }
         .v3 img { filter: var(--img); }
-        .v3 ::selection { background: var(--ink); color: var(--bg); }
+        .v3 ::selection { background: var(--sel, var(--ink)); color: var(--sel-ink, var(--bg)); }
         .v3-serif { font-family: var(--font-instrument), "Instrument Serif", serif; font-style: italic; letter-spacing: .005em; }
         .v3-link { color: inherit; text-decoration: none; }
         .v3-u { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; text-decoration-color: var(--line); transition: text-decoration-color 160ms; }
         .v3-link:hover .v3-u { text-decoration-color: currentColor; }
-        .v3-name { display: inline-block; line-height: 1.35; padding-bottom: 2px; border-bottom: 1px solid var(--line); transition: border-color 160ms; }
+        .v3-name { display: inline-block; line-height: 1.35; padding-bottom: 2px; border-bottom: 1px solid transparent; transition: border-color 160ms; }
         .v3-link:hover .v3-name, .v3-link:focus-visible .v3-name { border-bottom-color: currentColor; }
         .v3-arrow { display: inline-block; margin-left: 3px; font-size: 11px; color: var(--ink5); opacity: 0; transform: translate(-2px, 2px); transition: opacity 160ms, transform 200ms cubic-bezier(.16,1,.3,1); }
         .v3-link:hover .v3-arrow, .v3-link:focus-visible .v3-arrow { opacity: 1; transform: none; }
@@ -455,7 +540,7 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
         /* —— 首屏改版预览 —— */
         .v3 { --accent: #c2452d; }
         .dark .v3 { --accent: #d4664c; }
-        .look-a .look-col { border-top: 1px solid var(--line); padding-top: 18px; }
+        .look-a .look-col { padding-top: 2px; }
         .look-a .look-head { display: flex; align-items: baseline; gap: 10px; }
         .look-a .look-num { font-size: 26px; line-height: 1; color: var(--num, var(--ink)); transition: color 300ms; }
         /* 2×2 四角排布：宽屏时项目名和一句话排在同一行，过长省略 */
@@ -483,6 +568,28 @@ export function MinimalHome({ serifClass }: { serifClass: string }) {
         .v3-in { animation: v3-in 500ms cubic-bezier(.16,1,.3,1) both; }
         @keyframes v3-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
         @media (prefers-reduced-motion: reduce) { .v3-in { animation: v3-fade 200ms both; } @keyframes v3-fade { from { opacity: 0 } to { opacity: 1 } } }
+        /* —— 装饰层：巨字 AI（实色 + 左上偏移的描边重影）+ 漂浮光点 + 柔焦光斑 +
+           轨道圆环 + 闪烁十字星 + 竖排小字，全部挂在 .v3 根下的 fixed 层，背景之上内容之下 —— */
+        .v3-deco { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .v3-deco-ai, .v3-deco-ai-ghost { position: absolute; right: 5vw; bottom: 4vh; font-size: 32vw; line-height: .78; letter-spacing: -.02em; user-select: none; }
+        .v3-deco-ai { color: var(--deco); }
+        .v3-deco-ai-ghost { color: transparent; -webkit-text-stroke: 1.5px color-mix(in srgb, var(--ink) 9%, transparent); transform: translate(-1.3vw, -1vw); }
+        .v3-deco-side { position: absolute; top: 50%; right: 16px; transform: translateY(-50%) rotate(90deg); font-size: 11px; letter-spacing: .42em; color: var(--side); white-space: nowrap; }
+        .v3-dot { position: absolute; border-radius: 50%; background: var(--dot); animation: v3-drift 18s ease-in-out infinite alternate; }
+        .v3-dot-glow { box-shadow: 0 0 16px 3px var(--dot); }
+        @keyframes v3-drift { to { transform: translate(12px,-24px); } }
+        /* 轨道圆环：右上角切出屏的细线同心圆 */
+        .v3-ring { position: absolute; top: -23vmin; right: -13vmin; width: 62vmin; height: 62vmin; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ink) 8%, transparent); }
+        .v3-ring::after { content: ""; position: absolute; inset: 11vmin; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ink) 5%, transparent); }
+        /* 柔焦光斑：大团模糊圆，慢速漂移缩放，给纯色底加纵深 */
+        .v3-orb { position: absolute; border-radius: 50%; background: var(--dot); opacity: .16; filter: blur(36px); animation: v3-orb 26s ease-in-out infinite alternate; }
+        .v3-orb-b { animation-direction: alternate-reverse; animation-duration: 33s; }
+        @keyframes v3-orb { to { transform: translate(3vw,-4vh) scale(1.18); } }
+        /* 十字星：+ 号呼吸闪烁带轻微转动 */
+        .v3-plus { position: absolute; color: var(--dot); font-size: 15px; line-height: 1; animation: v3-twinkle 5.5s ease-in-out infinite; }
+        @keyframes v3-twinkle { 0%,100% { opacity: .12; transform: scale(.8) rotate(0deg); } 50% { opacity: .95; transform: scale(1.05) rotate(45deg); } }
+        @media (max-width: 800px) { .v3-deco-side, .v3-ring, .v3-orb { display: none; } .v3-deco-ai, .v3-deco-ai-ghost { font-size: 46vw; right: 2vw; bottom: 2vh; } }
+        @media (prefers-reduced-motion: reduce) { .v3-dot, .v3-orb, .v3-plus { animation: none; } }
       `}</style>
     </div>
   );

@@ -11,22 +11,38 @@
    横屏 18 列，竖屏 11 列；波浪延迟只跟相对位置走，取近似即可。 */
 const COLS = 18;
 
-/* 状态 → 悬停文案 */
+import { L, pick } from './i18n.js';
+
+/* 状态 → 悬停文案（双语块，悬停时按 <html lang> 取） */
 const TIP = {
-  sys:     ['系统占用', 'Windows 与未识别 · 1 GB'],
-  clean:   ['可清理', ['NVIDIA DXCache · 10.5 GB', 'DirectX 着色器缓存 · 4.05 GB',
+  sys:     { zh: ['系统占用', 'Windows 与未识别 · 1 GB'],
+             en: ['System', 'Windows & unclassified · 1 GB'] },
+  clean:   { zh: ['可清理', ['NVIDIA DXCache · 10.5 GB', 'DirectX 着色器缓存 · 4.05 GB',
                        'Playwright · 718 MB', 'Go 编译缓存 · 358 MB',
                        'Gradle caches · 321 MB', 'VS Code 缓存 · 88 MB',
                        'NuGet 缓存 · 275 MB', '浏览器缓存 · 642 MB']],
-  move:    ['建议迁移', ['HuggingFace 模型 · 1.9 GB', '微信聊天记录 · 620 MB', '项目依赖 · 370 MB']],
-  confirm: ['待确认', ['旧游戏存档 · 2.1 GB', '过期下载 · 1.36 GB', 'WorkBuddy AI · 1.48 GB',
+             en: ['Cleanable', ['NVIDIA DXCache · 10.5 GB', 'DirectX shader cache · 4.05 GB',
+                       'Playwright · 718 MB', 'Go build cache · 358 MB',
+                       'Gradle caches · 321 MB', 'VS Code cache · 88 MB',
+                       'NuGet cache · 275 MB', 'Browser cache · 642 MB']] },
+  move:    { zh: ['建议迁移', ['HuggingFace 模型 · 1.9 GB', '微信聊天记录 · 620 MB', '项目依赖 · 370 MB']],
+             en: ['Migrate', ['HuggingFace models · 1.9 GB', 'WeChat history · 620 MB', 'Project deps · 370 MB']] },
+  confirm: { zh: ['待确认', ['旧游戏存档 · 2.1 GB', '过期下载 · 1.36 GB', 'WorkBuddy AI · 1.48 GB',
                        '旧版安装包 · 980 MB', '导出视频 · 2.4 GB']],
-  busy:    ['正在使用', ['微信/QQ 运行中 · 6.58 GB', '已装应用 · 4.65 GB', 'Docker 镜像 · 2.2 GB']],
-  stat:    ['仅统计', ['文档与桌面 · 2.2 GB', '已装应用 · 4.65 GB', '系统组件 · 8.1 GB', '照片 · 1.3 GB']],
-  free:    ['可用', '可用空间 · 约 1 GB'],
-  warn:    ['大文件', ['安装包缓存 · 1.36 GB', '视频工程文件 · 4.2 GB', '虚拟机镜像 · 7.8 GB']],
-  res:     ['清理残留', '上次未删净 · 待重试'],
-  scan:    ['扫描中', '正在识别…'],
+             en: ['Review', ['Old game saves · 2.1 GB', 'Stale downloads · 1.36 GB', 'WorkBuddy AI · 1.48 GB',
+                       'Old installers · 980 MB', 'Exported videos · 2.4 GB']] },
+  busy:    { zh: ['正在使用', ['微信/QQ 运行中 · 6.58 GB', '已装应用 · 4.65 GB', 'Docker 镜像 · 2.2 GB']],
+             en: ['In use', ['WeChat/QQ running · 6.58 GB', 'Installed apps · 4.65 GB', 'Docker images · 2.2 GB']] },
+  stat:    { zh: ['仅统计', ['文档与桌面 · 2.2 GB', '已装应用 · 4.65 GB', '系统组件 · 8.1 GB', '照片 · 1.3 GB']],
+             en: ['Counted', ['Docs & desktop · 2.2 GB', 'Installed apps · 4.65 GB', 'System parts · 8.1 GB', 'Photos · 1.3 GB']] },
+  free:    { zh: ['可用', '可用空间 · 约 1 GB'],
+             en: ['Free', 'Free space · ~1 GB'] },
+  warn:    { zh: ['大文件', ['安装包缓存 · 1.36 GB', '视频工程文件 · 4.2 GB', '虚拟机镜像 · 7.8 GB']],
+             en: ['Big file', ['Installer cache · 1.36 GB', 'Video project · 4.2 GB', 'VM image · 7.8 GB']] },
+  res:     { zh: ['清理残留', '上次未删净 · 待重试'],
+             en: ['Leftover', 'Not fully deleted · pending retry'] },
+  scan:    { zh: ['扫描中', '正在识别…'],
+             en: ['Scanning', 'Recognizing…'] },
 };
 
 /* 故事顺序：[状态, 格数]，合计 198。
@@ -44,10 +60,9 @@ const CLS = { s:'sys', c:'clean', m:'move', f:'confirm', b:'busy',
               C:'freed', M:'moved' };
 
 let pick_i = 0;
-function tipFor(state) {
-  const t = TIP[state];
-  const detail = Array.isArray(t[1]) ? t[1][pick_i++ % t[1].length] : t[1];
-  return { name: t[0], detail };
+function tipIdxFor(state) {
+  const t = TIP[state].zh;
+  return Array.isArray(t[1]) ? pick_i++ : -1; // 数组详情每格轮换一条
 }
 
 export function buildGrid(el) {
@@ -59,9 +74,7 @@ export function buildGrid(el) {
       const d = document.createElement('i');
       d.className = 'cell cell--' + state;
       d.dataset.s = state;
-      const tip = tipFor(state);
-      d.dataset.tip = tip.detail;
-      d.dataset.cat = tip.name;
+      d.dataset.tipIdx = tipIdxFor(state); // 悬停时按语言从 TIP 取文案
       // 斜向波浪：按行主序算延迟（列*26 + 行*16）
       d.style.setProperty('--d', ((i % COLS) * 26 + Math.floor(i / COLS) * 16) + 'ms');
       frag.appendChild(d);
@@ -132,9 +145,12 @@ export function initLens(gmap, tip) {
   gmap.addEventListener('pointerover', e => {
     const c = e.target.closest('.cell');
     if (!c || e.pointerType === 'touch') { tip.classList.remove('on'); return; }
-    tip.textContent = c.classList.contains('is-freed') ? '已腾出 · 约 1 GB'
-      : c.classList.contains('is-moved') ? '已搬走 · 原地留了链接'
-      : `${c.dataset.tip} · ${c.dataset.cat}`;
+    const t = pick(TIP[c.dataset.s]);
+    const idx = +c.dataset.tipIdx || 0;
+    const detail = Array.isArray(t[1]) ? t[1][idx % t[1].length] : t[1];
+    tip.textContent = c.classList.contains('is-freed') ? L('已腾出 · 约 1 GB', 'Freed · ~1 GB')
+      : c.classList.contains('is-moved') ? L('已搬走 · 原地留了链接', 'Moved · link left in place')
+      : `${detail} · ${t[0]}`;
     const x = c.offsetLeft + c.offsetWidth / 2;
     tip.style.left = Math.min(Math.max(x, 110), gmap.clientWidth - 110) + 'px';
     // 顶上两排在导航底下，往上弹会被挡住，翻到格子下面

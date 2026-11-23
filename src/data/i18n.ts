@@ -109,9 +109,9 @@ export const EN_PROJECTS: Record<string, { title: string; tagline: string; descr
   },
   "qilan-atlas": {
     title: "Qilan Atlas",
-    tagline: "537 design concepts + 264 interface styles",
+    tagline: "635 design concepts + 264 interface styles",
     description:
-      "A browsable design atlas: 537 distilled design concepts and 264 interface style references, organized for fast lookup and inspiration.",
+      "A browsable design atlas: 635 distilled design concepts and 264 interface style references, organized for fast lookup and inspiration.",
     category: "Design base",
   },
   "spec-forge": {

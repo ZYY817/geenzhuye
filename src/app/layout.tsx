@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   title: "智宇 — 用 AI 把想法做成软件与网页",
   description:
-    "做产品出身，用 Claude 和 Cursor 把想法直接做成可用的软件与网页：宇奇引擎、宇奇轻管、AIClean、玩机索引等 14 个项目。",
+    "做产品出身，用 Claude 和 Cursor 把想法直接做成可用的软件与网页：宇奇引擎、宇奇轻管、AIClean、玩机索引等 16 个项目。",
   openGraph: {
     url: "/",
     title: "智宇 — 用 AI 把想法做成软件与网页",
